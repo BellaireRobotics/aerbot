@@ -3,6 +3,7 @@ package com.bellaire.aerbot.systems;
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.custom.RobotDrive3;
 import com.bellaire.aerbot.input.InputMethod;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -21,6 +22,7 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
     private Relay gearbox;
     private int gear = 0; // off
     private boolean gearPress = false;
+    private Compressor compressor;
 
     private double currentLeftY = 0, currentRightX = 0;
     private double currentRampY = 0, currentRampX = 0;
@@ -43,6 +45,8 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
 
         gearbox = new Relay(2);
         this.gearsOff();
+        
+        this.compressor = e.getCompressor();
     }
 
     public void destroy() {
