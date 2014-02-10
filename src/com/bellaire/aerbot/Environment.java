@@ -8,6 +8,7 @@ import com.bellaire.aerbot.systems.GyroSystem;
 import com.bellaire.aerbot.systems.IntakeSystem;
 import com.bellaire.aerbot.systems.SonarSystem;
 import com.bellaire.aerbot.systems.WheelSystem;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Environment {
@@ -20,6 +21,7 @@ public class Environment {
     private IntakeSystem intake;
     private SonarSystem sonar;
     private AccelerometerSystem accelerometer;
+    private Compressor compressor;
 
     public Environment(RobotBase robot) {
         this.robot = robot;
@@ -31,15 +33,18 @@ public class Environment {
 
         this.wheels = new WheelSystem();
         this.wheels.init(this);
-        
+
         this.intake = new IntakeSystem();
         this.intake.init(this);
-        
+
         this.sonar = new SonarSystem();
         this.sonar.init(this);
-        
+
         this.accelerometer = new AccelerometerSystem();
         this.accelerometer.init(this);
+
+        this.compressor = new Compressor(1, 1);
+        this.compressor.start();
     }
 
     public InputMethod getInput() {
@@ -53,19 +58,23 @@ public class Environment {
     public GyroSystem getGyroSystem() {
         return gyro;
     }
-    
-    public IntakeSystem getIntakeSystem(){
+
+    public IntakeSystem getIntakeSystem() {
         return intake;
     }
-    
-    public SonarSystem getSonarSystem(){
+
+    public SonarSystem getSonarSystem() {
         return sonar;
     }
-    
-    public AccelerometerSystem getAccelerometerSystem(){
+
+    public AccelerometerSystem getAccelerometerSystem() {
         return accelerometer;
     }
-
+    
+    public Compressor getCompressor(){
+        return compressor;
+    }
+    
     public boolean isAutonomous() {
         return robot.isAutonomous();
     }
