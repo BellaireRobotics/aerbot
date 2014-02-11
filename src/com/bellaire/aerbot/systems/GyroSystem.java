@@ -20,7 +20,7 @@ public class GyroSystem implements RobotSystem {
     }
 
     public void destroy() {
-        
+        gyro.free();
     }
     
 }
