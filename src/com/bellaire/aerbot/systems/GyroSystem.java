@@ -12,7 +12,7 @@ public class GyroSystem implements RobotSystem {
     }
     
     public double getHeading() {
-        return gyro.getAngle();
+        return gyro.getAngle() % 360;
     }
     
     public void reset() {
