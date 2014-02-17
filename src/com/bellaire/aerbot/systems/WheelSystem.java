@@ -45,7 +45,7 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
 
         gearbox = new Relay(2);
         this.gearsOff();
-        
+
         this.compressor = e.getCompressor();
     }
 
@@ -54,7 +54,6 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
 
     public void setMotors(double left, double right) {
         wheels.setLeftRightMotorOutputs(left, right);
-        automaticGearShift();
     }
 
     public void drive(double outputMaginitude, double curve) {
@@ -95,15 +94,15 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
             }
         }
 
-        if (input.getIntakeIn()) {
+        /*if (input.gearSwitch() && gyro.getHeading() > 2) {
             faceForward();
-        }
+        }*/
         try {
             SmartDashboard.putBoolean("Low gear: ", gearPress);
-            SmartDashboard.putNumber("Range: ", sonar.getDistance());
             SmartDashboard.putNumber("Angle: ", gyro.getHeading());
-        } catch (NullPointerException ex){
-            
+            SmartDashboard.putNumber("Range: ", sonar.getDistance());
+        } catch (NullPointerException ex) {
+
         }
     }
 
@@ -128,9 +127,9 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
 
     public void faceForward() {
         if (gyro.getHeading() < 90 || (gyro.getHeading() < 270 && gyro.getHeading() > 180)) {
-            setMotors(-.25, .25);
+            setMotors(.2, -.2);
         } else {
-            setMotors(.25, -.25);
+            setMotors(-.2, .2);
         }
     }
 
