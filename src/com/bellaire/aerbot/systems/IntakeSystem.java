@@ -4,16 +4,17 @@ import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Victor;
 
 public class IntakeSystem implements RobotSystem {
     
-    private Jaguar motor;
+    private Victor motor;
     private Relay arm;
     private boolean armPress;
     private boolean armDown;
     
     public void init(Environment e) {
-        motor = new Jaguar(3);
+        motor = new Victor(4);
         arm = new Relay(3);
     }
     
@@ -35,7 +36,7 @@ public class IntakeSystem implements RobotSystem {
         else if (!armPress) {
             armPress = true;
             if (armDown) {
-                arm.set(Relay.Value.kForward);// when LB is pressed pneumatic piston turns on or off
+                arm.set(Relay.Value.kForward); // when LB is pressed pneumatic piston turns on or off
             } else {
                 arm.set(Relay.Value.kOff);
             }

@@ -98,11 +98,11 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
         if (input.getIntakeIn()) {
             faceForward();
         }
-        try{
+        try {
             SmartDashboard.putBoolean("Low gear: ", gearPress);
-            SmartDashboard.putDouble("Range: ", sonar.getDistance());
-            SmartDashboard.putDouble("Angle: ", gyro.getHeading());
-        }catch (NullPointerException ex){
+            SmartDashboard.putNumber("Range: ", sonar.getDistance());
+            SmartDashboard.putNumber("Angle: ", gyro.getHeading());
+        } catch (NullPointerException ex){
             
         }
     }

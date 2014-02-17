@@ -18,7 +18,7 @@ public class ShooterSystem extends PIDSubsystem implements RobotSystem {
     public static final double POT_DOWN = 3;
     private Environment env;
     private Jaguar motors;
-    private Encoder encoder;
+    //private Encoder encoder;
 
     public ShooterSystem() {
         super(Kp, Ki, Kd);
@@ -27,19 +27,19 @@ public class ShooterSystem extends PIDSubsystem implements RobotSystem {
     public void init(Environment e) {
         env = e;
         motors = new Jaguar(10);
-        encoder = new Encoder(3, 3);
+        //encoder = new Encoder(3, 3);
     }
 
     public void destroy() {
         motors.free();
-        encoder.free();
+        //encoder.free();
     }
 
     public void shoot(double distance) {
         double angle = 0;
-        while (encoder.get() < distance) {
+        /*while () {
             motors.set(1);
-        }
+        }*/
         motors.set(0);
         setSetpoint(POT_DOWN);
         enable();
@@ -48,14 +48,14 @@ public class ShooterSystem extends PIDSubsystem implements RobotSystem {
     public void fire(InputMethod input){
         if(input.getShoot())
             motors.set(.2);
-        else if(encoder.get() > 0){
+        else if(false){
             setSetpoint(0);
             enable();
         }
     }
 
     protected double returnPIDInput() {
-        return encoder.get();
+        return 3;
     }
 
     protected void usePIDOutput(double d) {
