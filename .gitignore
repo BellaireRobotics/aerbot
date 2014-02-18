@@ -1,11 +1,14 @@
+nbproject/private/
 build/
 lib/
-resources/
-<<<<<<< HEAD
-nbproject/
-=======
-nbproject/private
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
 
 *.class
+
 *.jar
->>>>>>> 8923f3db1cde4d20961d549b73fc5d68b95861e5
+*.war
+*.ear
