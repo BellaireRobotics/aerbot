@@ -58,4 +58,12 @@ public class Xbox360Input implements InputMethod {
   public boolean getAntiShoot() {
     return controller.getRawAxis(3) > 0;
   }
+
+  public boolean getLeftTurn() {
+    return controller.getRawAxis(6) < 0;
+  }
+
+  public boolean getRightTurn() {
+    return controller.getRawAxis(6) > 0;
+  }
 }
