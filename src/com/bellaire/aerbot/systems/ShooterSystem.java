@@ -2,68 +2,42 @@ package com.bellaire.aerbot.systems;
 
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
-import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ShooterSystem extends PIDSubsystem implements RobotSystem {
+public class ShooterSystem implements RobotSystem {
 
-    private static final double Kp = 6;
-    private static final double Ki = 1.3;
-    private static final double Kd = 0.0;
-    public static final double LAUNCH_SPEED = 3;
-    public static final double GRAVITY = 9.81;
-    public static final double GOAL_HEIGHT = 3;
-    public static final double POT_DOWN = 3;
-    private Environment env;
-    private Jaguar motors;
-    //private Encoder encoder;
-
-    public ShooterSystem() {
-        super(Kp, Ki, Kd);
-    }
-
+    private Jaguar jaguar;
+    
+    private long start = 0, end = 0;
+    
     public void init(Environment e) {
-        env = e;
-        motors = new Jaguar(10);
-        //encoder = new Encoder(3, 3);
+        jaguar = new Jaguar(10);
+        
+        SmartDashboard.putNumber("shooter interval", 0.3d);
+        SmartDashboard.putNumber("shooter power", 0.3d);
     }
 
     public void destroy() {
-        motors.free();
-        //encoder.free();
-    }
-
-    public void shoot(double distance) {
-        double angle = 0;
-        /*while () {
-            motors.set(1);
-        }*/
-        motors.set(0);
-        setSetpoint(POT_DOWN);
-        enable();
+        
     }
     
-    public void fire(InputMethod input){
-        if(input.getShoot())
-            motors.set(.2);
-        else if(false){
-            setSetpoint(0);
-            enable();
+    public void shoot(InputMethod input) {
+        SmartDashboard.putNumber("shooter motor", jaguar.get());
+        if(input.getShoot() && start == -1) {
+            start = System.currentTimeMillis();
+            jaguar.set(-SmartDashboard.getNumber("shooter power", 0.3d));
+        }
+        
+        if(input.getAntiShoot()) {
+            jaguar.set(0.2d);
+        }
+        
+        long cur = System.currentTimeMillis();
+        if(cur - start > (1000 * SmartDashboard.getNumber("shooter interval", 3d)) && start != -1) {
+            start = -1;
+            jaguar.set(0d);
         }
     }
-
-    protected double returnPIDInput() {
-        return 3;
-    }
-
-    protected void usePIDOutput(double d) {
-        motors.set(d);
-    }
-
-    protected void initDefaultCommand() {
-
-    }
-
+    
 }

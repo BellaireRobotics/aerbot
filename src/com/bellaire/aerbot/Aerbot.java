@@ -2,6 +2,8 @@ package com.bellaire.aerbot;
 
 import com.bellaire.aerbot.controllers.AutonomousController;
 import com.bellaire.aerbot.controllers.OperatorController;
+import com.bellaire.aerbot.systems.AccelerometerSystem;
+import edu.wpi.first.wpilibj.Accelerometer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -12,8 +14,6 @@ public class Aerbot extends IterativeRobot {
 
     private AutonomousController autonomous;
     private OperatorController operator;
-
-
 
     public void robotInit() {
         this.environment = new Environment(this);

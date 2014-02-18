@@ -46,5 +46,9 @@ public class JoystickInput implements InputMethod {
     public boolean gearSwitch() {
         return false;
     }
+    
+    public boolean getAntiShoot(){
+        return false;
+    }
 
 }

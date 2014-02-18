@@ -23,7 +23,6 @@ public class Environment {
     private SonarSystem sonar;
     private AccelerometerSystem accelerometer;
     private ShooterSystem shooter;
-    private Compressor compressor;
 
     public Environment(RobotBase robot) {
         this.robot = robot;
@@ -47,9 +46,6 @@ public class Environment {
 
         this.accelerometer = new AccelerometerSystem();
         this.accelerometer.init(this);
-
-        this.compressor = new Compressor(1, 1);
-        this.compressor.start();
     }
 
     public InputMethod getInput() {
@@ -78,10 +74,6 @@ public class Environment {
     
     public ShooterSystem getShooterSystem(){
         return shooter;
-    }
-    
-    public Compressor getCompressor(){
-        return compressor;
     }
     
     public boolean isAutonomous() {

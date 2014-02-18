@@ -21,8 +21,6 @@ public class MovementListener implements Listener {
 
     public void execute() {
         env.getWheelSystem().move(env.getInput());
-        env.getIntakeSystem().intake(env.getInput());
-        env.getShooterSystem().fire(env.getInput());
     }
     
 }

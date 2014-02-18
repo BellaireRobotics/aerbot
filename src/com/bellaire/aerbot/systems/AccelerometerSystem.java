@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj.ADXL345_I2C;
 public class AccelerometerSystem implements RobotSystem {
 
     private ADXL345_I2C accel;
+    private double speed;
     
     public void init(Environment e) {
-       accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G);
+       accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k8G);
     }
     
     public double getAccelerationX() {
@@ -28,9 +29,14 @@ public class AccelerometerSystem implements RobotSystem {
     public double getAccelerationZ() {
         return accel.getAcceleration(ADXL345_I2C.Axes.kZ);
     }
+    
+    public double getSpeed(){
+        speed += getAccelerationX();
+        return speed;
+    }
 
     public void destroy() {
-        
+        accel.free();
     }
     
 }
