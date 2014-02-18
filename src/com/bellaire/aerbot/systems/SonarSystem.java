@@ -13,7 +13,7 @@ public class SonarSystem implements RobotSystem {
   }
 
   public void destroy() {
-
+      sonar.free();
   }
 
   public double getDistance() {

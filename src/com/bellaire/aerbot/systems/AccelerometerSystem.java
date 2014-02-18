@@ -15,7 +15,7 @@ public class AccelerometerSystem implements RobotSystem {
   private double speed;
 
   public void init(Environment e) {
-    accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k8G);
+    accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k4G);
   }
 
   public double getAccelerationX() {
