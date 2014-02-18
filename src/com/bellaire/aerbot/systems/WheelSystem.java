@@ -92,17 +92,14 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
         /*if (input.gearSwitch() && gyro.getHeading() > 2) {
          faceForward();
          }*/
-        try {
-            SmartDashboard.putBoolean("Low gear: ", gearPress);
-            SmartDashboard.putNumber("Angle: ", gyro.getHeading());
-            SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
-            SmartDashboard.putNumber("AccelerationY: ", accelerometer.getAccelerationY());
-            SmartDashboard.putNumber("AccelerationZ: ", accelerometer.getAccelerationZ());
-            SmartDashboard.putNumber("Speed: ", accelerometer.getSpeed());
-            SmartDashboard.putNumber("Range: ", sonar.getDistance());
-        } catch (NullPointerException ex) {
-
-        }
+        
+        SmartDashboard.putBoolean("Low gear: ", gearPress);
+        SmartDashboard.putNumber("Angle: ", gyro.getHeading());
+        SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
+        SmartDashboard.putNumber("AccelerationY: ", accelerometer.getAccelerationY());
+        SmartDashboard.putNumber("AccelerationZ: ", accelerometer.getAccelerationZ());
+        SmartDashboard.putNumber("Speed: ", accelerometer.getSpeed());
+        SmartDashboard.putNumber("Range: ", sonar.getDistance());
     }
 
     public void automaticGearShift() {
