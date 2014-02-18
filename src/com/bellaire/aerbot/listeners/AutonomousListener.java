@@ -7,11 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutonomousListener implements Listener {
 
   private Environment env;
+  private long start;
 
   public void init(Environment env) {
     this.env = env;
 
     SmartDashboard.putNumber("Autonomous Turn Speed", 0.05);
+    
+    start = System.currentTimeMillis();
   }
 
   public boolean isComplete() {
@@ -36,6 +39,10 @@ public class AutonomousListener implements Listener {
      String blob = client.getString("BLOBS", null);
      String blobs[] = blob.split(",");*/
 
+    if(System.currentTimeMillis() < start + 5000)
+      env.getWheelSystem().setMotors(.5, .5);
+    else
+      env.getWheelSystem().setMotors(0, 0);
   }
 
 }
