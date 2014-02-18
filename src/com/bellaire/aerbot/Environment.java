@@ -14,73 +14,73 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 public class Environment {
 
-    private RobotBase robot;
+  private RobotBase robot;
 
-    private InputMethod input;
-    private WheelSystem wheels;
-    private GyroSystem gyro;
-    private IntakeSystem intake;
-    private SonarSystem sonar;
-    private AccelerometerSystem accelerometer;
-    private ShooterSystem shooter;
+  private InputMethod input;
+  private WheelSystem wheels;
+  private GyroSystem gyro;
+  private IntakeSystem intake;
+  private SonarSystem sonar;
+  private AccelerometerSystem accelerometer;
+  private ShooterSystem shooter;
 
-    public Environment(RobotBase robot) {
-        this.robot = robot;
+  public Environment(RobotBase robot) {
+    this.robot = robot;
 
-        this.input = new Xbox360Input();
+    this.input = new Xbox360Input();
 
-        this.gyro = new GyroSystem();
-        this.gyro.init(this);
+    this.gyro = new GyroSystem();
+    this.gyro.init(this);
 
-        this.wheels = new WheelSystem();
-        this.wheels.init(this);
+    this.wheels = new WheelSystem();
+    this.wheels.init(this);
 
-        this.intake = new IntakeSystem();
-        this.intake.init(this);
+    this.intake = new IntakeSystem();
+    this.intake.init(this);
 
-        this.sonar = new SonarSystem();
-        this.sonar.init(this);
-        
-        this.shooter = new ShooterSystem();
-        this.shooter.init(this);
+    this.sonar = new SonarSystem();
+    this.sonar.init(this);
 
-        this.accelerometer = new AccelerometerSystem();
-        this.accelerometer.init(this);
-    }
+    this.shooter = new ShooterSystem();
+    this.shooter.init(this);
 
-    public InputMethod getInput() {
-        return input;
-    }
+    this.accelerometer = new AccelerometerSystem();
+    this.accelerometer.init(this);
+  }
 
-    public WheelSystem getWheelSystem() {
-        return wheels;
-    }
+  public InputMethod getInput() {
+    return input;
+  }
 
-    public GyroSystem getGyroSystem() {
-        return gyro;
-    }
+  public WheelSystem getWheelSystem() {
+    return wheels;
+  }
 
-    public IntakeSystem getIntakeSystem() {
-        return intake;
-    }
+  public GyroSystem getGyroSystem() {
+    return gyro;
+  }
 
-    public SonarSystem getSonarSystem() {
-        return sonar;
-    }
+  public IntakeSystem getIntakeSystem() {
+    return intake;
+  }
 
-    public AccelerometerSystem getAccelerometerSystem() {
-        return accelerometer;
-    }
-    
-    public ShooterSystem getShooterSystem(){
-        return shooter;
-    }
-    
-    public boolean isAutonomous() {
-        return robot.isAutonomous();
-    }
+  public SonarSystem getSonarSystem() {
+    return sonar;
+  }
 
-    public boolean isOperatorControl() {
-        return robot.isOperatorControl();
-    }
+  public AccelerometerSystem getAccelerometerSystem() {
+    return accelerometer;
+  }
+
+  public ShooterSystem getShooterSystem() {
+    return shooter;
+  }
+
+  public boolean isAutonomous() {
+    return robot.isAutonomous();
+  }
+
+  public boolean isOperatorControl() {
+    return robot.isOperatorControl();
+  }
 }

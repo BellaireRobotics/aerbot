@@ -5,7 +5,7 @@ import com.bellaire.aerbot.Executer;
 
 public class AutonomousController extends Controller {
 
-    public AutonomousController(Environment env, Executer exec) {
-        super(env, exec);
-    }
+  public AutonomousController(Environment env, Executer exec) {
+    super(env, exec);
+  }
 }

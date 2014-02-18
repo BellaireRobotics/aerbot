@@ -11,32 +11,32 @@ import edu.wpi.first.wpilibj.ADXL345_I2C;
 
 public class AccelerometerSystem implements RobotSystem {
 
-    private ADXL345_I2C accel;
-    private double speed;
-    
-    public void init(Environment e) {
-       accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k8G);
-    }
-    
-    public double getAccelerationX() {
-        return accel.getAcceleration(ADXL345_I2C.Axes.kX);
-    }
-    
-    public double getAccelerationY() {
-        return accel.getAcceleration(ADXL345_I2C.Axes.kY);
-    }
-    
-    public double getAccelerationZ() {
-        return accel.getAcceleration(ADXL345_I2C.Axes.kZ);
-    }
-    
-    public double getSpeed(){
-        speed += getAccelerationX();
-        return speed;
-    }
+  private ADXL345_I2C accel;
+  private double speed;
 
-    public void destroy() {
-        accel.free();
-    }
-    
+  public void init(Environment e) {
+    accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k8G);
+  }
+
+  public double getAccelerationX() {
+    return accel.getAcceleration(ADXL345_I2C.Axes.kX);
+  }
+
+  public double getAccelerationY() {
+    return accel.getAcceleration(ADXL345_I2C.Axes.kY);
+  }
+
+  public double getAccelerationZ() {
+    return accel.getAcceleration(ADXL345_I2C.Axes.kZ);
+  }
+
+  public double getSpeed() {
+    speed += getAccelerationX();
+    return speed;
+  }
+
+  public void destroy() {
+    accel.free();
+  }
+
 }
