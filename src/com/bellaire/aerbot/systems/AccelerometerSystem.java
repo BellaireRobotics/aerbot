@@ -41,7 +41,8 @@ public class AccelerometerSystem implements RobotSystem {
 
   public double getSpeed() {
     speed += getAccelerationX() * timer.get();
-    if(Math.abs(getAccelerationX()) < 0.1)speed = 0;
+    if(Math.abs(getAccelerationX()) < 0.1 && Math.abs(speed) < 0.1)
+      speed = 0;//reset accelerometer if relatively no acceleration and no speed
     timer.reset();
     return speed;
   }
