@@ -71,12 +71,9 @@ public class WheelSystem implements RobotSystem {
      if(currentRightX == 0) {
      currentRampX = 0;
      }*/
-    
-    if(Math.abs(input.getLeftY()) > .15 && Math.abs(input.getRightY()) < .03){
+    if (Math.abs(input.getLeftY()) > .15 && Math.abs(input.getRightY()) < .03) {
       straightDrive();
-      wheels.arcadeDrive(currentRampY, correctRotate);
-    }
-    else if (input.getLeftY() != 0 && input.getRightX() != 0) {
+    } else if (input.getLeftY() != 0 && input.getRightX() != 0) {
       wheels.arcadeDrive(currentRampY, currentRampX);
       straightDriving = false;
     }
@@ -141,19 +138,22 @@ public class WheelSystem implements RobotSystem {
     } catch (NullPointerException ex) {
 
     }
+    SmartDashboard.getBoolean("Straight driving: ", straightDriving);
   }
-  
-  public void straightDrive(){
-    if(!straightDriving)
+
+  public void straightDrive() {
+    if (!straightDriving) {
       heading = gyro.getHeading();
+    }
     straightDriving = true;
-    if(Math.abs(heading - gyro.getHeading()) > 2 && !straightDrivePID.getPIDController().isEnable()){
+    if (Math.abs(heading - gyro.getHeading()) > 2 && !straightDrivePID.getPIDController().isEnable()) {
       straightDrivePID.setSetpoint(heading);
       straightDrivePID.enable();
-    }else if(Math.abs(heading - gyro.getHeading()) <= 2 && straightDrivePID.getPIDController().isEnable()){
+    } else if (Math.abs(heading - gyro.getHeading()) <= 2 && straightDrivePID.getPIDController().isEnable()) {
       straightDrivePID.disable();
       correctRotate = 0;
     }
+    wheels.arcadeDrive(currentRampY, correctRotate);
   }
 
   public void automaticGearShift() {
@@ -261,6 +261,7 @@ public class WheelSystem implements RobotSystem {
     }
 
     protected void usePIDOutput(double d) {
+      SmartDashboard.getNumber("Straight drive PID: ", d);
       correctRotate = d;
     }
 
