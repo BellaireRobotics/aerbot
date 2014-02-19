@@ -7,11 +7,9 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class WheelSystem extends PIDSubsystem implements RobotSystem {
+public class WheelSystem implements RobotSystem {
 
-  private static final double Kp = 3;
-  private static final double Ki = .2;
-  private static final double Kd = 0.0;
+  private final GyroPID gyroPID = new GyroPID();
 
   private GyroSystem gyro;
   private SonarSystem sonar;
@@ -23,10 +21,6 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
 
   private double currentLeftY = 0, currentRightX = 0;
   private double currentRampY = 0, currentRampX = 0;
-
-  public WheelSystem() {
-    super(Kp, Ki, Kd);
-  }
 
   public void init(Environment e) {
     wheels = new RobotDrive3(1, 2);
@@ -42,9 +36,13 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
 
     gearbox = new Relay(2);
     this.gearsOff();
+    accelerometer = new AccelerometerSystem();
+    accelerometer.init(e);
   }
 
   public void destroy() {
+    wheels.free();
+    gearbox.free();
   }
 
   public void setMotors(double left, double right) {
@@ -69,7 +67,9 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
      if(currentRightX == 0) {
      currentRampX = 0;
      }*/
-    wheels.arcadeDrive(currentRampY, currentRampX);
+    if (input.getLeftY() != 0 && input.getRightX() != 0) {
+      wheels.arcadeDrive(currentRampY, currentRampX);
+    }
 
     //SmartDashboard.putNumber("Sonar Distance", sonar.getDistance());
     //SmartDashboard.putNumber("Robot Heading", motion.getHeading());
@@ -90,17 +90,47 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
       }
     }
 
+    // make left and right turns
+    if (Math.abs(input.getRightX()) > 0.12 && gyroPID.getPIDController().isEnable()) {
+      gyroPID.disable();
+    } else if (input.getLeftTurn() && !gyroPID.getPIDController().isEnable()) {
+      if (gyro.getHeading() < 90) {
+        gyroPID.setSetpoint(270 + gyro.getHeading());
+      } else {
+        gyroPID.setSetpoint(gyro.getHeading() - 90);
+      }
+      gyroPID.enable();
+    } else if (input.getRightTurn() && !gyroPID.getPIDController().isEnable()) {
+      if (gyro.getHeading() > 269) {
+        gyroPID.setSetpoint(270 - gyro.getHeading());
+      } else {
+        gyroPID.setSetpoint(gyro.getHeading() + 90);
+      }
+      gyroPID.enable();
+    }
     /*if (input.gearSwitch() && gyro.getHeading() > 2) {
      faceForward();
      }*/
 
     SmartDashboard.putBoolean("Low gear: ", gearPress);
     SmartDashboard.putNumber("Angle: ", gyro.getHeading());
-    SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
-    SmartDashboard.putNumber("AccelerationY: ", accelerometer.getAccelerationY());
-    SmartDashboard.putNumber("AccelerationZ: ", accelerometer.getAccelerationZ());
-    SmartDashboard.putNumber("Speed: ", accelerometer.getSpeed());
-    SmartDashboard.putNumber("Range: ", sonar.getDistance());
+    try {
+      SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
+      SmartDashboard.putNumber("AccelerationY: ", accelerometer.getAccelerationY());
+      SmartDashboard.putNumber("AccelerationZ: ", accelerometer.getAccelerationZ());
+    } catch (NullPointerException ex) {
+
+    }
+    try {
+      SmartDashboard.putNumber("Speed: ", accelerometer.getSpeed());
+    } catch (NullPointerException ex) {
+
+    }
+    try {
+      SmartDashboard.putNumber("Range: ", sonar.getDistance());
+    } catch (NullPointerException ex) {
+
+    }
   }
 
   public void automaticGearShift() {
@@ -122,46 +152,74 @@ public class WheelSystem extends PIDSubsystem implements RobotSystem {
   }
 
   public void faceForward() {
+    /*if (gyro.getHeading() < 90 || (gyro.getHeading() < 270 && gyro.getHeading() > 180)) {
+     setMotors(.2, -.2);
+     } else {
+     setMotors(-.2, .2);
+     }*/
     if (gyro.getHeading() < 90 || (gyro.getHeading() < 270 && gyro.getHeading() > 180)) {
-      setMotors(.2, -.2);
+      turn(0);
     } else {
-      setMotors(-.2, .2);
+      turn(180);
+    }
+  }
+
+  public void turn(double angle) {
+    if (!gyroPID.getPIDController().isEnable()) {
+      gyroPID.setSetpoint(angle);
+      gyroPID.enable();
+    } else if (gyroPID.getPosition() == angle) {
+      gyroPID.disable();
     }
   }
 
   public void driveDistance(double distance) {
-    if (!getPIDController().isEnable()) {
-      setSetpointRelative(distance);
-      enable();
-    } else if (getPosition() == distance) {
-      disable();
+    if (!gyroPID.getPIDController().isEnable()) {
+      gyroPID.setSetpointRelative(distance);
+      gyroPID.enable();
+    } else if (gyroPID.getPosition() == distance) {
+      gyroPID.disable();
     }
+    // PID should use another sensor
   }
 
   public void selfCatch() {
     if (gyro.getHeading() > 1 && gyro.getHeading() < 358) {
       faceForward();
-    } else if (getPosition() == 0) {
+    } else if (gyroPID.getPosition() == 0) {
       // if getPosition equals the point in front of the truss
       //shoot
       driveDistance(0);//driveToDistance point behind truss
-    } else if (getSetpoint() == 0) {
+    } else if (gyroPID.getSetpoint() == 0) {
       driveDistance(0);//drive to point behind the truss
-    } else if (getSetpoint() != 0 || getSetpoint() == 0) {
+    } else if (gyroPID.getSetpoint() != 0 || gyroPID.getSetpoint() == 0) {
       //if setpoint is not the point in front of the truss OR the setpoint is the point in front of the truss
       driveDistance(0);//drive to point in front of truss
     }
+    // should use another innner PID class
   }
 
-  protected double returnPIDInput() {
-    return sonar.getDistance();
-  }
+  private class GyroPID extends PIDSubsystem {
 
-  protected void usePIDOutput(double d) {
-    setMotors(d, -d);
-  }
+    private static final double Kp = .2;
+    private static final double Ki = .02;
+    private static final double Kd = 0.0;
 
-  protected void initDefaultCommand() {
+    public GyroPID() {
+      super(Kp, Ki, Kd);
+    }
 
+    protected double returnPIDInput() {
+      return gyro.getHeading();
+    }
+
+    protected void usePIDOutput(double d) {
+      SmartDashboard.putNumber("PID: ", d);
+      setMotors(-d, d);// positive d will result in right turn and vise versa
+    }
+
+    protected void initDefaultCommand() {
+
+    }
   }
 }

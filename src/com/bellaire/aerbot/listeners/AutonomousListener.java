@@ -1,17 +1,17 @@
 package com.bellaire.aerbot.listeners;
 
 import com.bellaire.aerbot.Environment;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonomousListener implements Listener {
 
   private Environment env;
+  private long time;
+  private long last;
+  
 
   public void init(Environment env) {
     this.env = env;
-
-    SmartDashboard.putNumber("Autonomous Turn Speed", 0.05);
+    //SmartDashboard.putNumber("Autonomous Turn Speed", 0.05);
   }
 
   public boolean isComplete() {
@@ -35,7 +35,19 @@ public class AutonomousListener implements Listener {
      int blob_count = Integer.parseInt(client.getString("BLOB_COUNT", "0"));
      String blob = client.getString("BLOBS", null);
      String blobs[] = blob.split(",");*/
-
+    /*if(justStarted)
+      start = System.currentTimeMillis();
+    justStarted = false;*/
+    
+    //if(System.currentTimeMillis() < start + 1250)
+    if(System.currentTimeMillis() - last > 1000)
+      time = System.currentTimeMillis();
+    if(System.currentTimeMillis() - time < 500){
+      env.getWheelSystem().setMotors(.35, .35);
+    }
+    else
+      env.getWheelSystem().setMotors(0, 0);
+    last = System.currentTimeMillis();
   }
 
 }
