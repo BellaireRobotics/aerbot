@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class WheelSystem implements RobotSystem {
 
   private final GyroPID gyroPID = new GyroPID();
+  private final StraightDrivePID straightDrivePID = new StraightDrivePID();
 
   private GyroSystem gyro;
   private SonarSystem sonar;
@@ -18,6 +19,9 @@ public class WheelSystem implements RobotSystem {
   private Relay gearbox;
   private int gear = 0; // off
   private boolean gearPress = false;
+  private double correctRotate;
+  private double heading;
+  private boolean straightDriving;
 
   private double currentLeftY = 0, currentRightX = 0;
   private double currentRampY = 0, currentRampX = 0;
@@ -67,8 +71,14 @@ public class WheelSystem implements RobotSystem {
      if(currentRightX == 0) {
      currentRampX = 0;
      }*/
-    if (input.getLeftY() != 0 && input.getRightX() != 0) {
+    
+    if(Math.abs(input.getLeftY()) > .15 && Math.abs(input.getRightY()) < .03){
+      straightDrive();
+      wheels.arcadeDrive(currentRampY, correctRotate);
+    }
+    else if (input.getLeftY() != 0 && input.getRightX() != 0) {
       wheels.arcadeDrive(currentRampY, currentRampX);
+      straightDriving = false;
     }
 
     //SmartDashboard.putNumber("Sonar Distance", sonar.getDistance());
@@ -130,6 +140,19 @@ public class WheelSystem implements RobotSystem {
       SmartDashboard.putNumber("Range: ", sonar.getDistance());
     } catch (NullPointerException ex) {
 
+    }
+  }
+  
+  public void straightDrive(){
+    if(!straightDriving)
+      heading = gyro.getHeading();
+    straightDriving = true;
+    if(Math.abs(heading - gyro.getHeading()) > 2 && !straightDrivePID.getPIDController().isEnable()){
+      straightDrivePID.setSetpoint(heading);
+      straightDrivePID.enable();
+    }else if(Math.abs(heading - gyro.getHeading()) <= 2 && straightDrivePID.getPIDController().isEnable()){
+      straightDrivePID.disable();
+      correctRotate = 0;
     }
   }
 
@@ -221,5 +244,29 @@ public class WheelSystem implements RobotSystem {
     protected void initDefaultCommand() {
 
     }
+  }
+
+  private class StraightDrivePID extends PIDSubsystem {
+
+    private static final double Kp = .3;
+    private static final double Ki = 0.0;
+    private static final double Kd = 0.0;
+
+    public StraightDrivePID() {
+      super(Kp, Ki, Kd);
+    }
+
+    protected double returnPIDInput() {
+      return gyro.getHeading();
+    }
+
+    protected void usePIDOutput(double d) {
+      correctRotate = d;
+    }
+
+    protected void initDefaultCommand() {
+
+    }
+
   }
 }
