@@ -36,6 +36,8 @@ public class WheelSystem implements RobotSystem {
 
     gearbox = new Relay(2);
     this.gearsOff();
+    accelerometer = new AccelerometerSystem();
+    accelerometer.init(e);
   }
 
   public void destroy() {
@@ -65,9 +67,11 @@ public class WheelSystem implements RobotSystem {
      if(currentRightX == 0) {
      currentRampX = 0;
      }*/
-    wheels.arcadeDrive(currentRampY, currentRampX);
+    if (input.getLeftY() != 0 && input.getRightX() != 0) {
+      wheels.arcadeDrive(currentRampY, currentRampX);
+    }
 
-        //SmartDashboard.putNumber("Sonar Distance", sonar.getDistance());
+    //SmartDashboard.putNumber("Sonar Distance", sonar.getDistance());
     //SmartDashboard.putNumber("Robot Heading", motion.getHeading());
     //SmartDashboard.putNumber("Robot Speed", motion.getSpeed());
     if (!input.gearSwitch()) {
@@ -87,26 +91,27 @@ public class WheelSystem implements RobotSystem {
     }
 
     // make left and right turns
-    if (input.getRightX() != 0) {
+    if (Math.abs(input.getRightX()) > 0.12 && gyroPID.getPIDController().isEnable()) {
       gyroPID.disable();
     } else if (input.getLeftTurn() && !gyroPID.getPIDController().isEnable()) {
       if (gyro.getHeading() < 90) {
         gyroPID.setSetpoint(270 + gyro.getHeading());
       } else {
-        gyroPID.setSetpointRelative(-90);
+        gyroPID.setSetpoint(gyro.getHeading() - 90);
       }
       gyroPID.enable();
     } else if (input.getRightTurn() && !gyroPID.getPIDController().isEnable()) {
       if (gyro.getHeading() > 269) {
         gyroPID.setSetpoint(270 - gyro.getHeading());
       } else {
-        gyroPID.setSetpointRelative(90);
+        gyroPID.setSetpoint(gyro.getHeading() + 90);
       }
       gyroPID.enable();
     }
     /*if (input.gearSwitch() && gyro.getHeading() > 2) {
      faceForward();
      }*/
+
     SmartDashboard.putBoolean("Low gear: ", gearPress);
     SmartDashboard.putNumber("Angle: ", gyro.getHeading());
     try {
@@ -182,7 +187,7 @@ public class WheelSystem implements RobotSystem {
     if (gyro.getHeading() > 1 && gyro.getHeading() < 358) {
       faceForward();
     } else if (gyroPID.getPosition() == 0) {
-            // if getPosition equals the point in front of the truss
+      // if getPosition equals the point in front of the truss
       //shoot
       driveDistance(0);//driveToDistance point behind truss
     } else if (gyroPID.getSetpoint() == 0) {
@@ -196,8 +201,8 @@ public class WheelSystem implements RobotSystem {
 
   private class GyroPID extends PIDSubsystem {
 
-    private static final double Kp = 3;
-    private static final double Ki = .2;
+    private static final double Kp = .2;
+    private static final double Ki = .02;
     private static final double Kd = 0.0;
 
     public GyroPID() {
@@ -209,6 +214,7 @@ public class WheelSystem implements RobotSystem {
     }
 
     protected void usePIDOutput(double d) {
+      SmartDashboard.putNumber("PID: ", d);
       setMotors(-d, d);// positive d will result in right turn and vise versa
     }
 

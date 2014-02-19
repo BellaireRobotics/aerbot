@@ -15,7 +15,7 @@ public class IntakeSystem implements RobotSystem {
 
   public void init(Environment e) {
     motor = new Victor(4);
-    arm = new Relay(3);
+    arm = new Relay(4);
   }
 
   public void destroy() {
