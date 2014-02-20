@@ -72,7 +72,7 @@ public class WheelSystem implements RobotSystem {
      currentRampX = 0;
      }*/
     if (Math.abs(input.getLeftY()) > .15 && Math.abs(input.getRightY()) < .03) {
-      straightDrive();
+      straightDrive(currentRampY);
     } else if (input.getLeftY() != 0 && input.getRightX() != 0) {
       wheels.arcadeDrive(currentRampY, currentRampX);
       straightDriving = false;
@@ -138,10 +138,10 @@ public class WheelSystem implements RobotSystem {
     } catch (NullPointerException ex) {
 
     }
-    SmartDashboard.getBoolean("Straight driving: ", straightDriving);
+    SmartDashboard.putBoolean("Straight driving: ", straightDriving);
   }
 
-  public void straightDrive() {
+  public void straightDrive(double moveValue) {
     if (!straightDriving) {
       heading = gyro.getHeading();
     }
@@ -153,7 +153,7 @@ public class WheelSystem implements RobotSystem {
       straightDrivePID.disable();
       correctRotate = 0;
     }
-    wheels.arcadeDrive(currentRampY, correctRotate);
+    wheels.arcadeDrive(moveValue, correctRotate);
   }
 
   public void automaticGearShift() {
