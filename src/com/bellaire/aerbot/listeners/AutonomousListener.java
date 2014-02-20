@@ -43,7 +43,7 @@ public class AutonomousListener implements Listener {
     if(System.currentTimeMillis() - last > 1000)
       time = System.currentTimeMillis();
     if(System.currentTimeMillis() - time < 500){
-      env.getWheelSystem().setMotors(.35, .35);
+      env.getWheelSystem().straightDrive(0.35);
     }
     else
       env.getWheelSystem().setMotors(0, 0);
