@@ -8,46 +8,35 @@ import edu.wpi.first.wpilibj.tables.ITableListener;
 
 public class RoboRealmSystem implements RobotSystem {
 
-    private NetworkTable nt1;
-    private NetworkTable nt2;
-    private NetworkTable nt3;
+    private NetworkTable XTable;
+    private NetworkTable YTable;
 
-    private final TableListener1 tableListener1 = new TableListener1();
-    private final TableListener2 tableListener2 = new TableListener2();
-    private final TableListener3 tableListener3 = new TableListener3();
+    private final TableListenerX XListener = new TableListenerX();
+    private final TableListenerY YListener = new TableListenerY();
 
     public RoboRealmSystem() {
 
     }
 
     public void init(Environment e) {
-        nt1 = NetworkTable.getTable("VisionTable");
-        nt1.addTableListener(tableListener1);
-        nt2 = NetworkTable.getTable("VisionTable2");
-        nt2.addTableListener(tableListener2);
-        nt3 = NetworkTable.getTable("VisionTable3");
-        nt3.addTableListener(tableListener3);
+        XTable = NetworkTable.getTable("VisionTableX");
+        XTable.addTableListener(XListener);
+        YTable = NetworkTable.getTable("VisionTableY");
+        YTable.addTableListener(YListener);
     }
 
     public void destroy() {
 
     }
 
-    private class TableListener1 implements ITableListener {
+    private class TableListenerX implements ITableListener {
 
         public void valueChanged(ITable itable, String key, Object obj, boolean isNew) {
             SmartDashboard.putString(key, obj.toString());
         }
     }
 
-    private class TableListener2 implements ITableListener {
-
-        public void valueChanged(ITable itable, String key, Object obj, boolean isNew) {
-            SmartDashboard.putString(key, obj.toString());
-        }
-    }
-
-    private class TableListener3 implements ITableListener {
+    private class TableListenerY implements ITableListener {
 
         public void valueChanged(ITable itable, String key, Object obj, boolean isNew) {
             SmartDashboard.putString(key, obj.toString());
