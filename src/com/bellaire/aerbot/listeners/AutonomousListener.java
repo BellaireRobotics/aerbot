@@ -45,8 +45,6 @@ public class AutonomousListener implements Listener {
       time = System.currentTimeMillis();
     if(System.currentTimeMillis() - time < 500){
       env.getWheelSystem().setMotors(.35, .35);
-    }else if(status == 0){
-        env.getRoboRealmSystem().faceHotTarget();
     }else
       env.getWheelSystem().setMotors(0, 0);
     last = System.currentTimeMillis();
