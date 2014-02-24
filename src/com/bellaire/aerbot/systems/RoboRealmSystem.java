@@ -7,12 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.ITableListener;
 
-public class RoboRealmSystem extends PIDSubsystem implements RobotSystem{
-
-    private static final double Kp = 1.1;
-    private static final double Ki = .2;
-    private static final double Kd = 0;
-    
+public class RoboRealmSystem implements RobotSystem{
+	
     private NetworkTable XTable;
     private NetworkTable YTable;
 
@@ -23,10 +19,6 @@ public class RoboRealmSystem extends PIDSubsystem implements RobotSystem{
     private double centerY;
     
     private Environment environment;
-    
-    public RoboRealmSystem(){
-        super(Kp, Ki, Kd);
-    }
 
     public void init(Environment e) {
         environment = e;
@@ -40,20 +32,9 @@ public class RoboRealmSystem extends PIDSubsystem implements RobotSystem{
 
     }
     
-    public void faceHotTarget(){
-        setSetpoint(0);
-        enable();
-    }
-
-    protected double returnPIDInput() {
-        return centerX;
-    }
-
-    protected void usePIDOutput(double d) {
-        environment.getWheelSystem().setMotors(-d, d);
-    }
-
-    protected void initDefaultCommand() {
+    //roborealm should say none if the bot can't see a hot target
+    public boolean onHotSide(){
+    	return centerX != -1;
     }
 
     private class TableListenerX implements ITableListener {
@@ -63,7 +44,8 @@ public class RoboRealmSystem extends PIDSubsystem implements RobotSystem{
             try{
                 centerX = Double.parseDouble(obj.toString());
             }catch(NumberFormatException ex){
-                
+                if(obj.toString().equals("none"))
+                	centerX = -1;
             }
         }
     }
@@ -75,7 +57,8 @@ public class RoboRealmSystem extends PIDSubsystem implements RobotSystem{
             try{
                 centerY = Double.parseDouble(obj.toString());
             }catch(NumberFormatException ex){
-                
+                if(obj.toString().equals("none"))
+                	centerY = -1;
             }
         }
     }

@@ -7,7 +7,7 @@ public class AutonomousListener implements Listener {
   private Environment env;
   private long time;
   private long last;
-  private int status;
+  private boolean shot;
   
 
   public void init(Environment env) {
@@ -23,6 +23,7 @@ public class AutonomousListener implements Listener {
     return env.isAutonomous();
   }
 
+  // the bot moves forward, then waits until it sees the hot target and shoots
   public void execute() {
     /*if(!camera.foundTarget()) {
         env.getWheelSystem().drive(SmartDashboard.getNumber("Autonomous Turn Speed", 0.05), 1);
@@ -45,8 +46,13 @@ public class AutonomousListener implements Listener {
       time = System.currentTimeMillis();
     if(System.currentTimeMillis() - time < 500){
       env.getWheelSystem().setMotors(.35, .35);
-    }else
-      env.getWheelSystem().setMotors(0, 0);
+    }else if(!shot){
+        env.getWheelSystem().setMotors(0, 0);// stop drive train motors
+    	if(env.getRoboRealmSystem().onHotSide()){
+    		//shoot
+    		shot = true;
+    	}
+    }
     last = System.currentTimeMillis();
   }
 
