@@ -17,7 +17,7 @@ public class SonarSystem implements RobotSystem {
   }
 
   public double getDistance() {
-    return sonar.getVoltage() * (512d / 5d);
+    return Math.round(sonar.getVoltage() * (512d / 5d));//rounded to reduce noise
   }
 
 }
