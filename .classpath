@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="build/app.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/murpheya/sunspotfrcsdk/lib/networktables-crio.jar"/>
+	<classpathentry kind="lib" path="C:/Users/murpheya/sunspotfrcsdk/lib/squawk.jar"/>
+	<classpathentry kind="lib" path="C:/Users/murpheya/sunspotfrcsdk/lib/wpilibj.jar"/>
+	<classpathentry kind="lib" path="C:/Users/murpheya/sunspotfrcsdk/lib/wpilibj.project.zip"/>
+	<classpathentry kind="lib" path="C:/Users/murpheya/sunspotfrcsdk/lib/wpilibj.src.zip"/>
+	<classpathentry kind="output" path="build/preverify"/>
+</classpath>
