@@ -47,7 +47,7 @@ public class JoystickInput implements InputMethod {
         return false;
     }
 
-    public boolean getAntiShoot() {
+    public boolean getPrepareToShoot() {
         return false;
     }
 

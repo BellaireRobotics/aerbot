@@ -20,7 +20,7 @@ public interface InputMethod {
 
   public boolean gearSwitch();
 
-  public boolean getAntiShoot();
+  public boolean getPrepareToShoot();
   
   public boolean getLeftTurn();
   
