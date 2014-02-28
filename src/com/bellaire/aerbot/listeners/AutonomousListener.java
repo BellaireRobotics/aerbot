@@ -40,13 +40,16 @@ public class AutonomousListener implements Listener {
     justStarted = false;*/
     
     //if(System.currentTimeMillis() < start + 1250)
+  	env.getShooterSystem().setMotor(1);
     if(System.currentTimeMillis() - last > 1000)
       time = System.currentTimeMillis();
     if(System.currentTimeMillis() - time < 500){
       env.getWheelSystem().setMotors(.35, .35);
     }
-    else
+    else{
       env.getWheelSystem().setMotors(0, 0);
+      env.getShooterSystem().fire();
+    }
     last = System.currentTimeMillis();
   }
 

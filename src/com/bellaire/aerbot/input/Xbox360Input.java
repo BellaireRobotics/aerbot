@@ -9,7 +9,7 @@ public class Xbox360Input implements InputMethod {
   public static final int BUTTON_A = 1;// intake out
   public static final int BUTTON_B = 2;
   public static final int BUTTON_X = 3; // intake in
-  public static final int BUTTON_Y = 4;
+  public static final int BUTTON_Y = 4;// shooter motor
   public static final int BUTTON_LB = 5;
   public static final int BUTTON_RB = 6; // intake pneumatic
   public static final int BUTTON_BACK = 7; // not to be used
@@ -48,11 +48,11 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getShoot() {
-    return controller.getRawAxis(3) < 0.5;
+    return controller.getRawAxis(3) < 0.1;
   }
   
   public boolean getPrepareToShoot(){
-	  return controller.getRawAxis(3) < 0.1;
+	  return controller.getRawButton(BUTTON_Y);
   }
 
   public boolean gearSwitch() {
