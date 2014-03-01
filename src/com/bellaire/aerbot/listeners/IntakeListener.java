@@ -21,5 +21,14 @@ public class IntakeListener implements Listener {
   public void execute() {
     env.getIntakeSystem().intake(env.getInput());
   }
+  
+	@Override
+	public void run() {
+		while(true){
+			if(!isComplete() && shouldExecute())
+				execute();
+		}
+		
+	}
 
 }

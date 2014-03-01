@@ -1,6 +1,7 @@
 package com.bellaire.aerbot.listeners;
 
 import com.bellaire.aerbot.Environment;
+
 import edu.wpi.first.wpilibj.Compressor;
 
 public class CompressorListener implements Listener {
@@ -33,5 +34,14 @@ public class CompressorListener implements Listener {
     }
     off = Math.abs(environment.getInput().getLeftY()) > 0.07 || Math.abs(environment.getInput().getRightX()) > 0.07;
   }
+  
+	@Override
+	public void run() {
+		while(true){
+			if(!isComplete() && shouldExecute())
+				execute();
+		}
+		
+	}
 
 }

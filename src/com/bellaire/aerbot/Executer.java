@@ -28,11 +28,11 @@ public class Executer {
     sl.init(e);
     il.init(e);
 
-    notRunning.addElement(ml);
-    notRunning.addElement(al);
-    notRunning.addElement(cl);
-    notRunning.addElement(sl);
-    notRunning.addElement(il);
+    new Thread(ml).start();
+    new Thread(al).start();
+    new Thread(cl).start();
+    new Thread(sl).start();
+    new Thread(il).start();
   }
 
   public void update() {

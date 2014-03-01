@@ -22,5 +22,14 @@ public class MovementListener implements Listener {
   public void execute() {
     env.getWheelSystem().move(env.getInput());
   }
+  
+	@Override
+	public void run() {
+		while(true){
+			if(!isComplete() && shouldExecute())
+				execute();
+		}
+		
+	}
 
 }

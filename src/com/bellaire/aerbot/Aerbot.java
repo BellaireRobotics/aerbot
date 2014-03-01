@@ -26,7 +26,7 @@ public class Aerbot extends IterativeRobot {
   }
 
   public void autonomousPeriodic() {
-    autonomous.update();
+    //autonomous.update();
   }
 
   public void teleopInit() {
@@ -35,7 +35,7 @@ public class Aerbot extends IterativeRobot {
   }
 
   public void teleopPeriodic() {
-    operator.update();
+    //operator.update();
   }
 
   public void testPeriodic() {

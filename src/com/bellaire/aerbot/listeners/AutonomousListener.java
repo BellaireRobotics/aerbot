@@ -50,4 +50,13 @@ public class AutonomousListener implements Listener {
     last = System.currentTimeMillis();
   }
 
+	@Override
+	public void run() {
+		while(true){
+			if(!isComplete() && shouldExecute())
+				execute();
+		}
+		
+	}
+
 }

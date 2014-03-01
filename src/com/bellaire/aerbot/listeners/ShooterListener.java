@@ -22,4 +22,12 @@ public class ShooterListener implements Listener {
     env.getShooterSystem().shoot(env.getInput());
   }
 
+	@Override
+	public void run() {
+		while(true){
+			if(!isComplete() && shouldExecute())
+				execute();
+		}
+		
+	}
 }

@@ -6,9 +6,12 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
-
+*.project
+*.classpath
+*.gitignore
 *.class
 
 *.jar
 *.war
 *.ear
+/bin
