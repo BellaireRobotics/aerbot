@@ -5,22 +5,18 @@ import com.bellaire.aerbot.input.InputMethod;
 
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Timer;
 
 public class ShooterSystem implements RobotSystem {
 
-	public static final double SHOT_DELAY = 2.5;
-	
   private Jaguar jaguar;
   private Relay pneumatic;
   private boolean shot;
-  private Timer timer;
+  private boolean buttonPressed;
+  private boolean motorOn;
 
   public void init(Environment e) {
     jaguar = new Jaguar(10);
     pneumatic = new Relay(3);
-    timer = new Timer();
-    timer.start();
   }
 
   public void destroy() {
@@ -29,21 +25,20 @@ public class ShooterSystem implements RobotSystem {
   }
 
   public void shoot(InputMethod input) {
-    if(input.getPrepareToShoot()){
-    	setMotor(1);
-    }else{
-    	setMotor(0.5);
-    	timer.reset();
+    if(input.getPrepareToShoot() && !buttonPressed){
+    	//toggle wheels speed between off and full speed
+    	setMotor(motorOn ? 0 : 1);
     }
-    // shoot button won't respond until a certain amount of time after motors speed up
-    if(input.getShoot() && timer.get() > SHOT_DELAY)
+    buttonPressed = input.getPrepareToShoot();
+    if(input.getShoot())
     	fire();
     else
     	pneumaticDown();
   }
   
   public void setMotor(double speed){
-	  jaguar.set(speed);;
+	  jaguar.set(speed);
+	  motorOn = speed == 1;// update the motorOn instance variable
   }
   
   public void fire(){
