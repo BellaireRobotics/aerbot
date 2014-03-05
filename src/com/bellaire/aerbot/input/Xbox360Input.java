@@ -60,10 +60,10 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getLeftTurn() {
-    return controller.getRawAxis(6) < 0;
+    return controller.getRawAxis(6) < -0.1;
   }
 
   public boolean getRightTurn() {
-    return controller.getRawAxis(6) > 0;
+    return controller.getRawAxis(6) > 0.1;
   }
 }
