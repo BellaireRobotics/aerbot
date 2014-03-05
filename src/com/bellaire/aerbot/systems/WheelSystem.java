@@ -3,7 +3,9 @@ package com.bellaire.aerbot.systems;
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.custom.RobotDrive3;
 import com.bellaire.aerbot.input.InputMethod;
+
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,6 +20,8 @@ public class WheelSystem implements RobotSystem {
   private Relay gearbox;
   private int gear = 0; // off
   private boolean gearPress = false;
+  private boolean automatic = true;
+  private Timer timer;
 
   private double currentLeftY = 0, currentRightX = 0;
   private double currentRampY = 0, currentRampX = 0;
@@ -35,9 +39,13 @@ public class WheelSystem implements RobotSystem {
     this.sonar = e.getSonarSystem();
 
     gearbox = new Relay(2);
-    this.gearsOff();
+    this.gearsForward();
+    gear = 1;
     accelerometer = new AccelerometerSystem();
     accelerometer.init(e);
+    
+    timer = new Timer();
+    timer.start();
   }
 
   public void destroy() {
@@ -82,13 +90,18 @@ public class WheelSystem implements RobotSystem {
       if (input.gearSwitch()) {
         gearPress = true;
 
-        if (gear == 0) {
-          this.gearsForward();
-        } else if (gear == 1) {
-          this.gearsOff();
+        if (automatic) {
+          if (gear == 0) {
+            this.gearsForward();
+          } else if (gear == 1) {
+            this.gearsOff();
+          }
         }
+        automatic = !automatic;
       }
     }
+    if(automatic)
+      automaticGearShift();
 
     // make left and right turns
     if (Math.abs(input.getRightX()) > 0.12 && gyroPID.getPIDController().isEnable()) {
@@ -133,11 +146,16 @@ public class WheelSystem implements RobotSystem {
     }
   }
 
+  //shift gears at 1.75 meters per second and won't shift again for 0.5 seconds
   public void automaticGearShift() {
-    if (accelerometer.getAccelerationX() > 3) { // if encoder rate is greater than gear shift speed
-      gearsForward();
-    } else {
-      gearsOff();
+    if (Math.abs(accelerometer.getSpeed()) > 1.75 && gear == 1) {
+    	if(timer.get() > 0.5)
+    		gearsOff();
+    	timer.reset();
+    } else if (gear == 0) {
+    	if(timer.get() > 0.5)
+    		gearsForward();
+    	timer.reset();
     }
   }
 
