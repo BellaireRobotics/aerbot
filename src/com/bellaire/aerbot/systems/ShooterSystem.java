@@ -5,6 +5,7 @@ import com.bellaire.aerbot.input.InputMethod;
 
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSystem implements RobotSystem {
 
@@ -34,6 +35,13 @@ public class ShooterSystem implements RobotSystem {
     	fire();
     else
     	pneumaticDown();
+    try{
+    	SmartDashboard.putBoolean("Shooter motor on: ", motorOn);
+    	SmartDashboard.putNumber("Shooter motor speed: ", jaguar.getSpeed());
+    	SmartDashboard.putBoolean("Shooter pneumatic on: ", pneumatic.get() != Relay.Value.kOff);
+    }catch(NullPointerException ex){
+    	
+    }
   }
   
   public void setMotor(double speed){
