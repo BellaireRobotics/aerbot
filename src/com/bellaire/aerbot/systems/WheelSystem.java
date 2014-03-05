@@ -149,13 +149,15 @@ public class WheelSystem implements RobotSystem {
   //shift gears at 1.75 meters per second and won't shift again for 0.5 seconds
   public void automaticGearShift() {
     if (Math.abs(accelerometer.getSpeed()) > 1.75 && gear == 1) {
-    	if(timer.get() > 0.5)
+    	if(timer.get() > 0.5){
     		gearsOff();
-    	timer.reset();
+    		timer.reset();
+    	}
     } else if (gear == 0) {
-    	if(timer.get() > 0.5)
+    	if(timer.get() > 0.5){
     		gearsForward();
-    	timer.reset();
+    		timer.reset();
+    	}
     }
   }
 
