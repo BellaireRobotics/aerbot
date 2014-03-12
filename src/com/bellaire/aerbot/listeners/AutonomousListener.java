@@ -11,7 +11,6 @@ public class AutonomousListener implements Listener {
 
   public void init(Environment env) {
     this.env = env;
-    //SmartDashboard.putNumber("Autonomous Turn Speed", 0.05);
   }
 
   public boolean isComplete() {
@@ -23,29 +22,12 @@ public class AutonomousListener implements Listener {
   }
 
   public void execute() {
-    /*if(!camera.foundTarget()) {
-        env.getWheelSystem().drive(SmartDashboard.getNumber("Autonomous Turn Speed", 0.05), 1);
-    }*/
-    /* NetworkTable client = NetworkTable.getTable("VisionTable");
-
-     int cog_x = Integer.parseInt(client.getString("COG_X", "0"));
-     int cog_y = Integer.parseInt(client.getString("COG_X", "0"));
-     int img_width = Integer.parseInt(client.getString("IMAGE_WIDTH", "0"));
-     int img_height = Integer.parseInt(client.getString("IMAGE_HEIGHT", "0"));
-     int blob_count = Integer.parseInt(client.getString("BLOB_COUNT", "0"));
-     String blob = client.getString("BLOBS", null);
-     String blobs[] = blob.split(",");*/
-    /*if(justStarted)
-      start = System.currentTimeMillis();
-    justStarted = false;*/
-    
-    //if(System.currentTimeMillis() < start + 1250)
     if(System.currentTimeMillis() - last > 1000)
-      time = System.currentTimeMillis();
-    if(System.currentTimeMillis() - time < 500){
+      time = System.currentTimeMillis();// start time
+    if(System.currentTimeMillis() - time < 4500){
+    	// move forward for 4.5 seconds with straight driving at 0.35 motor speed
       env.getWheelSystem().straightDrive(0.35);
-    }
-    else
+    }else
       env.getWheelSystem().setMotors(0, 0);
     last = System.currentTimeMillis();
   }
