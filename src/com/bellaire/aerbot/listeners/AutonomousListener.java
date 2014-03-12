@@ -24,9 +24,9 @@ public class AutonomousListener implements Listener {
   public void execute() {
     if(System.currentTimeMillis() - last > 1000)
       time = System.currentTimeMillis();// start time
-    if(System.currentTimeMillis() - time < 4500){
-    	// move forward for 4.5 seconds with straight driving at 0.35 motor speed
-      env.getWheelSystem().straightDrive(0.35);
+    if(System.currentTimeMillis() - time < 3500){
+    	// move forward (actually backwards) for 3.5 seconds with straight driving at 0.35 motor speed
+      env.getWheelSystem().straightDrive(-0.35);
     }else
       env.getWheelSystem().setMotors(0, 0);
     last = System.currentTimeMillis();
