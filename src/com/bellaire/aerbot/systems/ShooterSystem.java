@@ -17,7 +17,7 @@ public class ShooterSystem implements RobotSystem {
 
   public void init(Environment e) {
     jaguar = new Jaguar(10);
-    pneumatic = new Relay(3);
+    pneumatic = new Relay(9);
   }
 
   public void destroy() {
