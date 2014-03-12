@@ -153,7 +153,7 @@ public class WheelSystem implements RobotSystem {
     		gearsOff();
     		timer.reset();
     	}
-    } else if (gear == 0) {
+    } else if (Math.abs(accelerometer.getSpeed()) <= 1.75 && gear == 0) {
     	if(timer.get() > 0.5){
     		gearsForward();
     		timer.reset();
