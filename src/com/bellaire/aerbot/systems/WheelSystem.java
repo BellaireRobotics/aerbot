@@ -19,8 +19,8 @@ public class WheelSystem implements RobotSystem {
   private int gear = 0; // off
   private boolean gearPress = false;
 
-  private double currentLeftY = 0, currentRightX = 0;
-  private double currentRampY = 0, currentRampX = 0;
+  private double currentLeftY = 0;
+  private double currentRampY = 0;
 
   public void init(Environment e) {
     wheels = new RobotDrive3(1, 2);
@@ -56,10 +56,8 @@ public class WheelSystem implements RobotSystem {
 
   public void move(InputMethod input) {
     currentLeftY = -input.getLeftY();
-    currentRightX = input.getRightX();
 
-    currentRampY += (currentLeftY - currentRampY) * (20d / 100d);
-    currentRampX += (currentRightX - currentRampX) * (20d / 100d);
+    currentRampY += (currentLeftY - currentRampY) * .5;
 
     /*if(currentLeftY == 0) {
      currentRampY = 0;
@@ -68,7 +66,7 @@ public class WheelSystem implements RobotSystem {
      currentRampX = 0;
      }*/
     if (input.getLeftY() != 0 && input.getRightX() != 0) {
-      wheels.arcadeDrive(currentRampY, currentRampX);
+      wheels.arcadeDrive(currentRampY, input.getRightX());
     }
 
     //SmartDashboard.putNumber("Sonar Distance", sonar.getDistance());
