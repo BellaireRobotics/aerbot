@@ -74,7 +74,7 @@ public class WheelSystem implements RobotSystem {
     // if user is using the left stick and not the right stick straight driving will be used
     if (Math.abs(input.getLeftY()) > .15 && Math.abs(input.getRightY()) < .15) {
       straightDrive(currentRampY);
-    } else {
+    } else if(!gyroPID.getPIDController().isEnable()){
       wheels.arcadeDrive(currentRampY, currentRampX);
       straightDriving = false;
     }
