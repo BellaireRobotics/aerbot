@@ -125,7 +125,8 @@ public class WheelSystem implements RobotSystem {
      faceForward();
      }*/
 
-    SmartDashboard.putBoolean("Low gear: ", gearPress);
+    SmartDashboard.putBoolean("Low gear: ", gear == 1);
+    SmartDashboard.putBoolean("Automatic shifting: ", automatic);
     SmartDashboard.putNumber("Angle: ", gyro.getHeading());
     try {
       SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
