@@ -14,6 +14,7 @@ public class ShooterSystem implements RobotSystem {
   private boolean shot;
   private boolean buttonPressed;
   private boolean motorOn;
+  private boolean shotPressed;
 
   public void init(Environment e) {
     jaguar = new Jaguar(10);
@@ -31,10 +32,16 @@ public class ShooterSystem implements RobotSystem {
     	setMotor(motorOn ? 0 : 1);
     }
     buttonPressed = input.getPrepareToShoot();
-    if(input.getShoot())
-    	fire();
-    else
-    	pneumaticDown();
+    
+    //toggle shooter pneumatic
+    if(!shotPressed && input.getShoot()){
+    	if(shot)
+    		pneumaticDown();
+    	else
+    		fire();
+    }
+    shotPressed = input.getShoot();
+    
     try{
     	SmartDashboard.putBoolean("Shooter motor on: ", motorOn);
     	SmartDashboard.putNumber("Shooter motor speed: ", jaguar.getSpeed());
