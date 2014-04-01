@@ -25,4 +25,6 @@ public interface InputMethod {
   public boolean getLeftTurn();
   
   public boolean getRightTurn();
+  
+  public boolean getAutoIntake();
 }

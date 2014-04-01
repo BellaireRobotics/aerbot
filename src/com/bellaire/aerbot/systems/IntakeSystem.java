@@ -2,7 +2,7 @@ package com.bellaire.aerbot.systems;
 
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
-import edu.wpi.first.wpilibj.Jaguar;
+
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Victor;
 
@@ -12,6 +12,7 @@ public class IntakeSystem implements RobotSystem {
   private Relay arm;
   private boolean armPress;
   private boolean armDown;
+  private boolean autoPress;
 
   public void init(Environment e) {
     motor = new Victor(4);
@@ -28,12 +29,25 @@ public class IntakeSystem implements RobotSystem {
       motor.set(-1);
     } else if (input.getIntakeOut()) {
       motor.set(1);
+    } else if(input.getAutoIntake()){
+    	motor.set(1);// intake motor on
     } else {
       motor.set(0);
     }
 
     if (!input.getIntakePneumatic()) {
       armPress = false;
+      
+      // let the pneumatic down
+      if(!autoPress && input.getAutoIntake()){
+      	arm.set(Relay.Value.kForward);
+      	armDown = true;
+      }else if(autoPress && !input.getAutoIntake()){
+      	// raise the pneumatic when the button is released
+      	arm.set(Relay.Value.kOff);
+      	armDown = false;
+      }
+      
     } else if (!armPress) {
       armPress = true;
 
@@ -45,5 +59,6 @@ public class IntakeSystem implements RobotSystem {
 
       armDown = !armDown;
     }
+    autoPress = input.getAutoIntake();
   }
 }
