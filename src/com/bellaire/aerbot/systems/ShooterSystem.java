@@ -3,13 +3,13 @@ package com.bellaire.aerbot.systems;
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
 
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSystem implements RobotSystem {
 
-  private Jaguar jaguar;
+  private Victor motor;
   private Relay pneumatic;
   private boolean shot;
   private boolean buttonPressed;
@@ -17,12 +17,12 @@ public class ShooterSystem implements RobotSystem {
   private boolean shotPressed;
 
   public void init(Environment e) {
-    jaguar = new Jaguar(10);
+    motor = new Victor(10);
     pneumatic = new Relay(9);
   }
 
   public void destroy() {
-	  jaguar.free();
+	  motor.free();
 	  pneumatic.free();
   }
 
@@ -44,7 +44,7 @@ public class ShooterSystem implements RobotSystem {
     
     try{
     	SmartDashboard.putBoolean("Shooter motor on: ", motorOn);
-    	SmartDashboard.putNumber("Shooter motor speed: ", jaguar.getSpeed());
+    	SmartDashboard.putNumber("Shooter motor speed: ", motor.getSpeed());
     	SmartDashboard.putBoolean("Shooter pneumatic on: ", pneumatic.get() != Relay.Value.kOff);
     }catch(NullPointerException ex){
     	
@@ -52,12 +52,12 @@ public class ShooterSystem implements RobotSystem {
   }
   
   public void setMotor(double speed){
-	  jaguar.set(speed);
+	  motor.set(speed);
 	  motorOn = speed == 1;// update the motorOn instance variable
   }
   
   public void fire(){
-	  if(jaguar.get() == 0)
+	  if(motor.get() == 0)
 		  setMotor(1);// just in case motor is not moving
 	  if(!shot){
 		  pneumatic.set(Relay.Value.kForward);
