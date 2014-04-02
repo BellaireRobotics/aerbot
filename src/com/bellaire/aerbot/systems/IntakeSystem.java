@@ -4,18 +4,18 @@ import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
 
 import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Jaguar;
 
 public class IntakeSystem implements RobotSystem {
 
-  private Victor motor;
+  private Jaguar motor;
   private Relay arm;
   private boolean armPress;
   private boolean armDown;
   private boolean autoPress;
 
   public void init(Environment e) {
-    motor = new Victor(4);
+    motor = new Jaguar(4);
     arm = new Relay(4);
   }
 
