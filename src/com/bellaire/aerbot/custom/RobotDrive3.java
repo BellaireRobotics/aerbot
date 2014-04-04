@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.communication.UsageReporting;
 
 public class RobotDrive3 extends RobotDrive {
+	
+	private double lastRotateValue;
 
   public RobotDrive3(int leftMotorChannel, int rightMotorChannel) {
     super(leftMotorChannel, rightMotorChannel);
@@ -25,6 +27,9 @@ public class RobotDrive3 extends RobotDrive {
     moveValue = limit(moveValue);
     rotateValue = limit(rotateValue);
 
+    if(Math.abs(rotateValue - lastRotateValue) > 0.5)
+    	rotateValue /= 5;// half rotateValue if it jumps by 0.5 to prevent tripping the breaker
+    
     if (squaredInputs) {
       // square the inputs (while preserving the sign) to increase fine control while permitting full power
       if (moveValue >= 0.0) {
@@ -56,6 +61,7 @@ public class RobotDrive3 extends RobotDrive {
     }
 
     setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
+    lastRotateValue = rotateValue;
   }
 
 }
