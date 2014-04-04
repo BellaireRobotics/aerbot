@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WheelSystem implements RobotSystem {
 
+	public static final double SHIFTING_SPEED = 2;
+	
   private final GyroPID gyroPID = new GyroPID();
 
   private GyroSystem gyro;
@@ -163,12 +165,12 @@ public class WheelSystem implements RobotSystem {
 
   //shift gears at 1.75 meters per second and won't shift again for 0.5 seconds
   public void automaticGearShift() {
-    if (Math.abs(accelerometer.getSpeed()) > 1.75 && gear == 1) {
+    if (Math.abs(accelerometer.getSpeed()) > SHIFTING_SPEED && gear == 1) {
     	if(timer.get() > 0.5){
     		gearsOff();
     		timer.reset();
     	}
-    } else if (Math.abs(accelerometer.getSpeed()) <= 1.75 && gear == 0) {
+    } else if (Math.abs(accelerometer.getSpeed()) <= SHIFTING_SPEED && gear == 0) {
     	if(timer.get() > 0.5){
     		gearsForward();
     		timer.reset();
