@@ -26,9 +26,9 @@ public class IntakeSystem implements RobotSystem {
 
 	public void intake(InputMethod input) {
 		if (input.getIntakeIn()) {
-			motor.set(-1);
-		} else if (input.getIntakeOut()) {
 			motor.set(1);
+		} else if (input.getIntakeOut()) {
+			motor.set(-1);
 		} else if (input.getAutoIntake()) {
 			motor.set(1);// intake motor on
 		} else {
