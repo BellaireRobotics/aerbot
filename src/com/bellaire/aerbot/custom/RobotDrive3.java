@@ -26,9 +26,6 @@ public class RobotDrive3 extends RobotDrive {
 
     moveValue = limit(moveValue);
     rotateValue = limit(rotateValue);
-
-    if(rotateValue - lastRotateValue > 0.5)
-    	rotateValue /= 5;// half rotateValue if it jumps by 0.5 to prevent tripping the breaker
     
     if (squaredInputs) {
       // square the inputs (while preserving the sign) to increase fine control while permitting full power
@@ -41,6 +38,9 @@ public class RobotDrive3 extends RobotDrive {
 
     // cube the rotate values
     rotateValue = (rotateValue * rotateValue * rotateValue);
+
+    if(rotateValue - lastRotateValue > 0.5)
+    	rotateValue /= 5;// half rotateValue if it jumps by 0.5 to prevent tripping the breaker
 
     if (moveValue > 0.0) {
       if (rotateValue > 0.0) {
