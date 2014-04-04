@@ -59,4 +59,8 @@ public class JoystickInput implements InputMethod {
         return false;
     }
 
+		public boolean getAutoIntake() {
+			return false;
+		}
+
 }

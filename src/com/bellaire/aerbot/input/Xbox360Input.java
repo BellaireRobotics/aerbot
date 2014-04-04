@@ -10,8 +10,8 @@ public class Xbox360Input implements InputMethod {
   public static final int BUTTON_B = 2;
   public static final int BUTTON_X = 3; // intake in
   public static final int BUTTON_Y = 4;
-  public static final int BUTTON_LB = 5;
-  public static final int BUTTON_RB = 6; // intake pneumatic
+  public static final int BUTTON_LB = 5; // intake pneumatic
+  public static final int BUTTON_RB = 6; // intake out and intake motors on
   public static final int BUTTON_BACK = 7; // not to be used
   public static final int BUTTON_START = 8; // not to be used
 
@@ -66,4 +66,8 @@ public class Xbox360Input implements InputMethod {
   public boolean getRightTurn() {
     return controller.getRawAxis(6) > 0;
   }
+
+	public boolean getAutoIntake() {
+		return controller.getRawButton(BUTTON_RB);
+	}
 }
