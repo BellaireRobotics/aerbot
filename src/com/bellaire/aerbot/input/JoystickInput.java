@@ -63,7 +63,7 @@ public class JoystickInput implements InputMethod {
 		public boolean getAutoIntake() {
 			return false;
 		}
-		@Override
+
 		public boolean getSwitchFront() {
 			return false;
 		}
