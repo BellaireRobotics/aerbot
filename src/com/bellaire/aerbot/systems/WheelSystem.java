@@ -133,11 +133,15 @@ public class WheelSystem implements RobotSystem {
     	front *= -1;
     switchPress = input.getSwitchFront();
 
-    SmartDashboard.putBoolean("Low gear: ", gear == 1);
-    SmartDashboard.putBoolean("Automatic shifting: ", automatic);
-    SmartDashboard.putBoolean("Low gear: ", gearPress);
-    SmartDashboard.putBoolean("Switched front: ", front == -1);
-    SmartDashboard.putNumber("Angle: ", gyro.getHeading());
+    try{
+      SmartDashboard.putBoolean("Low gear: ", gear == 1);
+      SmartDashboard.putBoolean("Automatic shifting: ", automatic);
+      SmartDashboard.putBoolean("Low gear: ", gearPress);
+      SmartDashboard.putBoolean("Switched front: ", front == -1);
+      SmartDashboard.putNumber("Angle: ", gyro.getHeading());
+    }catch(NullPointerException ex){
+    	
+    }
     try {
       SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
       SmartDashboard.putNumber("AccelerationY: ", accelerometer.getAccelerationY());

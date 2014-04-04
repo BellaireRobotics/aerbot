@@ -7,13 +7,13 @@ public class Xbox360Input implements InputMethod {
   private Joystick controller;
 
   public static final int BUTTON_A = 1;// intake out
-  public static final int BUTTON_B = 2;
+  public static final int BUTTON_B = 2;// gearshift override
   public static final int BUTTON_X = 3; // intake in
-  public static final int BUTTON_Y = 4;
-  public static final int BUTTON_LB = 5; // intake pneumatic
+  public static final int BUTTON_Y = 4; // switchfront
+  public static final int BUTTON_LB = 5;
   public static final int BUTTON_RB = 6; // intake out and intake motors on
-  public static final int BUTTON_BACK = 7; // not to be used
-  public static final int BUTTON_START = 8; // not to be used
+  public static final int BUTTON_BACK = 7;
+  public static final int BUTTON_START = 8;
 
   public Xbox360Input() {
     controller = new Joystick(1);
@@ -44,11 +44,11 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getIntakePneumatic() {
-    return controller.getRawButton(BUTTON_LB);
+    return controller.getRawAxis(3) < .2;
   }
 
   public boolean getShoot() {
-    return controller.getRawAxis(3) < 0;
+    return false;
   }
 
   public boolean gearSwitch() {
@@ -56,7 +56,7 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getAntiShoot() {
-    return controller.getRawAxis(3) > 0;
+    return false;
   }
 
   public boolean getLeftTurn() {
@@ -73,6 +73,6 @@ public class Xbox360Input implements InputMethod {
 	
 	@Override
 	public boolean getSwitchFront() {
-		return controller.getRawButton(BUTTON_START);
+		return controller.getRawButton(BUTTON_Y);
 	}
 }
