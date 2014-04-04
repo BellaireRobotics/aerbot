@@ -22,6 +22,8 @@ public class WheelSystem implements RobotSystem {
   private boolean gearPress = false;
   private boolean automatic = true;
   private Timer timer;
+  private int front = 1;
+  private boolean switchPress;
 
   private double currentLeftY = 0;
   private double currentRampY = 0;
@@ -64,6 +66,9 @@ public class WheelSystem implements RobotSystem {
 
   public void move(InputMethod input) {
     currentLeftY = -input.getLeftY();
+    
+    //allow for forward direction to be toggled
+    currentLeftY *= front;
 
     currentRampY += (currentLeftY - currentRampY) * .5;
 
@@ -122,9 +127,16 @@ public class WheelSystem implements RobotSystem {
     /*if (input.gearSwitch() && gyro.getHeading() > 2) {
      faceForward();
      }*/
+    
+    //toggle forward direction
+    if(!switchPress && input.getSwitchFront())
+    	front *= -1;
+    switchPress = input.getSwitchFront();
 
     SmartDashboard.putBoolean("Low gear: ", gear == 1);
     SmartDashboard.putBoolean("Automatic shifting: ", automatic);
+    SmartDashboard.putBoolean("Low gear: ", gearPress);
+    SmartDashboard.putBoolean("Switched front: ", front == -1);
     SmartDashboard.putNumber("Angle: ", gyro.getHeading());
     try {
       SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());

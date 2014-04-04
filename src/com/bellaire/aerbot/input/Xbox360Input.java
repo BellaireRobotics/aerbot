@@ -70,4 +70,9 @@ public class Xbox360Input implements InputMethod {
 	public boolean getAutoIntake() {
 		return controller.getRawButton(BUTTON_RB);
 	}
+	
+	@Override
+	public boolean getSwitchFront() {
+		return controller.getRawButton(BUTTON_START);
+	}
 }
