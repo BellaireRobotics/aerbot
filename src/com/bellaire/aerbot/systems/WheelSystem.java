@@ -17,7 +17,6 @@ public class WheelSystem implements RobotSystem {
   private final StraightDrivePID straightDrivePID = new StraightDrivePID();
 
   private GyroSystem gyro;
-  private SonarSystem sonar;
   private AccelerometerSystem accelerometer;
   private RobotDrive3 wheels;
   private Relay gearbox;
@@ -40,11 +39,8 @@ public class WheelSystem implements RobotSystem {
     wheels.setSafetyEnabled(false);
 
     this.gyro = e.getGyroSystem();
-    sonar = e.getSonarSystem();
 
     accelerometer = e.getAccelerometerSystem();
-
-    this.sonar = e.getSonarSystem();
 
     gearbox = new Relay(2);
     this.gearsForward();
@@ -63,11 +59,6 @@ public class WheelSystem implements RobotSystem {
 
   public void setMotors(double left, double right) {
     wheels.setLeftRightMotorOutputs(left, right);
-  }
-
-  public void drive(double outputMaginitude, double curve) {
-    wheels.drive(outputMaginitude, curve);
-    automaticGearShift();
   }
 
   public void move(InputMethod input) {
@@ -125,9 +116,6 @@ public class WheelSystem implements RobotSystem {
       }
       gyroPID.enable();
     }
-    /*if (input.gearSwitch() && gyro.getHeading() > 2) {
-     faceForward();
-     }*/
     
     //toggle forward direction
     if(!switchPress && input.getSwitchFront())
@@ -137,7 +125,6 @@ public class WheelSystem implements RobotSystem {
     try{
       SmartDashboard.putBoolean("Low gear: ", gear == 1);
       SmartDashboard.putBoolean("Automatic shifting: ", automatic);
-      SmartDashboard.putBoolean("Low gear: ", gearPress);
       SmartDashboard.putBoolean("Switched front: ", front == -1);
       SmartDashboard.putNumber("Angle: ", gyro.getHeading());
     }catch(NullPointerException ex){
@@ -152,11 +139,6 @@ public class WheelSystem implements RobotSystem {
     }
     try {
       SmartDashboard.putNumber("Speed: ", accelerometer.getSpeed());
-    } catch (NullPointerException ex) {
-
-    }
-    try {
-      SmartDashboard.putNumber("Range: ", sonar.getDistance());
     } catch (NullPointerException ex) {
 
     }
@@ -251,7 +233,7 @@ public class WheelSystem implements RobotSystem {
     }
 
     protected void usePIDOutput(double d) {
-      SmartDashboard.getNumber("Straight drive PID: ", d);
+      SmartDashboard.putNumber("Straight drive PID: ", d);
       correctRotate = d;
     }
 
