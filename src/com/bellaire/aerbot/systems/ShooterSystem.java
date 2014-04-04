@@ -3,8 +3,9 @@ package com.bellaire.aerbot.systems;
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
 
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSystem implements RobotSystem {
@@ -15,10 +16,15 @@ public class ShooterSystem implements RobotSystem {
   private boolean buttonPressed;
   private boolean motorOn;
   private boolean shotPressed;
+  private Timer timer;
+  
+  public static final double DELAY = 2.0;
 
   public void init(Environment e) {
     motor = new Victor(10);
     pneumatic = new Relay(9);
+    timer = new Timer();
+    timer.start();
   }
 
   public void destroy() {
@@ -32,6 +38,8 @@ public class ShooterSystem implements RobotSystem {
     	setMotor(motorOn ? 0 : 1);
     }
     buttonPressed = input.getPrepareToShoot();
+    //control shooter motor
+    setMotor(input.getPrepareToShoot() ? 1 : 0);
     
     //toggle shooter pneumatic
     if(!shotPressed && input.getShoot()){
@@ -54,12 +62,15 @@ public class ShooterSystem implements RobotSystem {
   public void setMotor(double speed){
 	  motor.set(speed);
 	  motorOn = speed == 1;// update the motorOn instance variable
+	  if(motorOn)
+	  	timer.reset();
   }
   
   public void fire(){
-	  if(motor.get() == 0)
+	  if(!motorOn)
 		  setMotor(1);// just in case motor is not moving
-	  if(!shot){
+	  if(!shot && timer.get() < 2){
+	  	// delay shooting pneumatic
 		  pneumatic.set(Relay.Value.kForward);
 		  shot = true;
 	  }
