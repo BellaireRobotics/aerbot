@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Xbox360Input implements InputMethod {
 
   private Joystick controller;
+  private Joystick partner;
 
   public static final int BUTTON_A = 1;// intake out
   public static final int BUTTON_B = 2;
@@ -17,6 +18,7 @@ public class Xbox360Input implements InputMethod {
 
   public Xbox360Input() {
     controller = new Joystick(1);
+    partner = new Joystick(2);
   }
 
   public double getLeftX() {
@@ -48,11 +50,11 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getShoot() {
-    return controller.getRawAxis(3) > 0.2;
+    return partner.getRawAxis(3) > 0.2;
   }
   
   public boolean getPrepareToShoot(){
-	  return controller.getRawButton(BUTTON_LB);
+	  return partner.getRawButton(BUTTON_LB);
   }
 
   public boolean gearSwitch() {
