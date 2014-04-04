@@ -61,15 +61,13 @@ public class ShooterSystem implements RobotSystem {
   
   public void setMotor(double speed){
 	  motor.set(speed);
-	  motorOn = speed == 1;// update the motorOn instance variable
-	  if(motorOn)
+	  if(!motorOn && speed == 1)
 	  	timer.reset();
+	  motorOn = speed == 1;// update the motorOn instance variable
   }
   
   public void fire(){
-	  if(!motorOn)
-		  setMotor(1);// just in case motor is not moving
-	  if(!shot && timer.get() < 2){
+	  if(!shot && motorOn && timer.get() > 2){
 	  	// delay shooting pneumatic
 		  pneumatic.set(Relay.Value.kForward);
 		  shot = true;
