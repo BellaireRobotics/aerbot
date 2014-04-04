@@ -203,19 +203,6 @@ public class WheelSystem implements RobotSystem {
     gearbox.set(Relay.Value.kReverse);
   }
 
-  public void faceForward() {
-    /*if (gyro.getHeading() < 90 || (gyro.getHeading() < 270 && gyro.getHeading() > 180)) {
-     setMotors(.2, -.2);
-     } else {
-     setMotors(-.2, .2);
-     }*/
-    if (gyro.getHeading() < 90 || (gyro.getHeading() < 270 && gyro.getHeading() > 180)) {
-      turn(0);
-    } else {
-      turn(180);
-    }
-  }
-
   public void turn(double angle) {
     if (!gyroPID.getPIDController().isEnable()) {
       gyroPID.setSetpoint(angle);
@@ -224,33 +211,7 @@ public class WheelSystem implements RobotSystem {
       gyroPID.disable();
     }
   }
-
-  public void driveDistance(double distance) {
-    if (!gyroPID.getPIDController().isEnable()) {
-      gyroPID.setSetpointRelative(distance);
-      gyroPID.enable();
-    } else if (gyroPID.getPosition() == distance) {
-      gyroPID.disable();
-    }
-    // PID should use another sensor
-  }
-
-  public void selfCatch() {
-    if (gyro.getHeading() > 1 && gyro.getHeading() < 358) {
-      faceForward();
-    } else if (gyroPID.getPosition() == 0) {
-      // if getPosition equals the point in front of the truss
-      //shoot
-      driveDistance(0);//driveToDistance point behind truss
-    } else if (gyroPID.getSetpoint() == 0) {
-      driveDistance(0);//drive to point behind the truss
-    } else if (gyroPID.getSetpoint() != 0 || gyroPID.getSetpoint() == 0) {
-      //if setpoint is not the point in front of the truss OR the setpoint is the point in front of the truss
-      driveDistance(0);//drive to point in front of truss
-    }
-    // should use another innner PID class
-  }
-
+  
   private class GyroPID extends PIDSubsystem {
 
     private static final double Kp = .02;
