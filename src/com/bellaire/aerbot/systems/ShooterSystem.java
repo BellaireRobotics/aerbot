@@ -22,7 +22,7 @@ public class ShooterSystem implements RobotSystem {
 
   public void init(Environment e) {
     motor = new Victor(10);
-    pneumatic = new Relay(9);
+    pneumatic = new Relay(6);
     timer = new Timer();
     timer.start();
   }
