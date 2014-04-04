@@ -21,7 +21,7 @@ public class ShooterSystem implements RobotSystem {
   public static final double DELAY = 2.0;
 
   public void init(Environment e) {
-    motor = new Victor(10);
+    motor = new Victor(4);
     pneumatic = new Relay(6);
     timer = new Timer();
     timer.start();
