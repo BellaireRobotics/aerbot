@@ -220,7 +220,7 @@ public class WheelSystem implements RobotSystem {
 
   private class GyroPID extends PIDSubsystem {
 
-    private static final double Kp = .2;
+    private static final double Kp = .02;
     private static final double Ki = .02;
     private static final double Kd = 0.0;
 
