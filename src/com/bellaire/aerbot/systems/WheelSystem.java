@@ -3,12 +3,16 @@ package com.bellaire.aerbot.systems;
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.custom.RobotDrive3;
 import com.bellaire.aerbot.input.InputMethod;
+
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WheelSystem implements RobotSystem {
 
+	public static final double SHIFTING_SPEED = 2;
+	
   private final GyroPID gyroPID = new GyroPID();
   private final StraightDrivePID straightDrivePID = new StraightDrivePID();
 
@@ -22,9 +26,13 @@ public class WheelSystem implements RobotSystem {
   private double correctRotate;
   private double heading;
   private boolean straightDriving;
+  private boolean automatic = true;
+  private Timer timer;
+  private int front = 1;
+  private boolean switchPress;
 
-  private double currentLeftY = 0, currentRightX = 0;
-  private double currentRampY = 0, currentRampX = 0;
+  private double currentLeftY = 0;
+  private double currentRampY = 0;
 
   public void init(Environment e) {
     wheels = new RobotDrive3(1, 2);
@@ -39,9 +47,13 @@ public class WheelSystem implements RobotSystem {
     this.sonar = e.getSonarSystem();
 
     gearbox = new Relay(2);
-    this.gearsOff();
+    this.gearsForward();
+    gear = 1;
     accelerometer = new AccelerometerSystem();
     accelerometer.init(e);
+    
+    timer = new Timer();
+    timer.start();
   }
 
   public void destroy() {
@@ -60,28 +72,20 @@ public class WheelSystem implements RobotSystem {
 
   public void move(InputMethod input) {
     currentLeftY = -input.getLeftY();
-    currentRightX = input.getRightX();
+    
+    //allow for forward direction to be toggled
+    currentLeftY *= front;
 
-    currentRampY += (currentLeftY - currentRampY) * (20d / 100d);
-    currentRampX += (currentRightX - currentRampX) * (20d / 100d);
-
-    /*if(currentLeftY == 0) {
-     currentRampY = 0;
-     }
-     if(currentRightX == 0) {
-     currentRampX = 0;
-     }*/
+    currentRampY += (currentLeftY - currentRampY) * .5;
+    
     // if user is using the left stick and not the right stick straight driving will be used
     if (Math.abs(input.getLeftY()) > .15 && Math.abs(input.getRightY()) < .15) {
       straightDrive(currentRampY);
     } else if(!gyroPID.getPIDController().isEnable()){
-      wheels.arcadeDrive(currentRampY, currentRampX);
+      wheels.arcadeDrive(currentRampY, input.getRightX());
       straightDriving = false;
     }
 
-    //SmartDashboard.putNumber("Sonar Distance", sonar.getDistance());
-    //SmartDashboard.putNumber("Robot Heading", motion.getHeading());
-    //SmartDashboard.putNumber("Robot Speed", motion.getSpeed());
     if (!input.gearSwitch()) {
       gearPress = false;
     }
@@ -90,13 +94,18 @@ public class WheelSystem implements RobotSystem {
       if (input.gearSwitch()) {
         gearPress = true;
 
-        if (gear == 0) {
-          this.gearsForward();
-        } else if (gear == 1) {
-          this.gearsOff();
+        if (automatic) {
+          if (gear == 0) {
+            this.gearsForward();
+          } else if (gear == 1) {
+            this.gearsOff();
+          }
         }
+        automatic = !automatic;
       }
     }
+    if(automatic)
+      automaticGearShift();
 
     // make left and right turns
     if (Math.abs(input.getRightX()) > 0.12 && gyroPID.getPIDController().isEnable()) {
@@ -119,9 +128,21 @@ public class WheelSystem implements RobotSystem {
     /*if (input.gearSwitch() && gyro.getHeading() > 2) {
      faceForward();
      }*/
+    
+    //toggle forward direction
+    if(!switchPress && input.getSwitchFront())
+    	front *= -1;
+    switchPress = input.getSwitchFront();
 
-    SmartDashboard.putBoolean("Low gear: ", gearPress);
-    SmartDashboard.putNumber("Angle: ", gyro.getHeading());
+    try{
+      SmartDashboard.putBoolean("Low gear: ", gear == 1);
+      SmartDashboard.putBoolean("Automatic shifting: ", automatic);
+      SmartDashboard.putBoolean("Low gear: ", gearPress);
+      SmartDashboard.putBoolean("Switched front: ", front == -1);
+      SmartDashboard.putNumber("Angle: ", gyro.getHeading());
+    }catch(NullPointerException ex){
+    	
+    }
     try {
       SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());
       SmartDashboard.putNumber("AccelerationY: ", accelerometer.getAccelerationY());
@@ -157,11 +178,18 @@ public class WheelSystem implements RobotSystem {
     wheels.arcadeDrive(moveValue, correctRotate);
   }
 
+  //shift gears at 1.75 meters per second and won't shift again for 0.5 seconds
   public void automaticGearShift() {
-    if (accelerometer.getAccelerationX() > 3) { // if encoder rate is greater than gear shift speed
-      gearsForward();
-    } else {
-      gearsOff();
+    if (Math.abs(accelerometer.getSpeed()) > SHIFTING_SPEED && gear == 1) {
+    	if(timer.get() > 0.5){
+    		gearsOff();
+    		timer.reset();
+    	}
+    } else if (Math.abs(accelerometer.getSpeed()) <= SHIFTING_SPEED && gear == 0) {
+    	if(timer.get() > 0.5){
+    		gearsForward();
+    		timer.reset();
+    	}
     }
   }
 
@@ -225,7 +253,7 @@ public class WheelSystem implements RobotSystem {
 
   private class GyroPID extends PIDSubsystem {
 
-    private static final double Kp = .2;
+    private static final double Kp = .02;
     private static final double Ki = .02;
     private static final double Kd = 0.0;
 
