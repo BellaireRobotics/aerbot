@@ -18,7 +18,7 @@ public class GyroSystem implements RobotSystem {
       output += 360;
     }
 
-    return output;
+    return output % 360;
   }
 
   public void reset() {
