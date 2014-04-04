@@ -18,6 +18,8 @@ public class WheelSystem implements RobotSystem {
   private Relay gearbox;
   private int gear = 0; // off
   private boolean gearPress = false;
+  private int front = 1;
+  private boolean switchPress;
 
   private double currentLeftY = 0, currentRightX = 0;
   private double currentRampY = 0, currentRampX = 0;
@@ -57,6 +59,9 @@ public class WheelSystem implements RobotSystem {
   public void move(InputMethod input) {
     currentLeftY = -input.getLeftY();
     currentRightX = input.getRightX();
+    
+    //allow for forward direction to be toggled
+    currentLeftY *= front;
 
     currentRampY += (currentLeftY - currentRampY) * (20d / 100d);
     currentRampX += (currentRightX - currentRampX) * (20d / 100d);
@@ -111,8 +116,14 @@ public class WheelSystem implements RobotSystem {
     /*if (input.gearSwitch() && gyro.getHeading() > 2) {
      faceForward();
      }*/
+    
+    //toggle forward direction
+    if(!switchPress && input.getSwitchFront())
+    	front *= -1;
+    switchPress = input.getSwitchFront();
 
     SmartDashboard.putBoolean("Low gear: ", gearPress);
+    SmartDashboard.putBoolean("Switched front: ", front == -1);
     SmartDashboard.putNumber("Angle: ", gyro.getHeading());
     try {
       SmartDashboard.putNumber("AccelerationX: ", accelerometer.getAccelerationX());

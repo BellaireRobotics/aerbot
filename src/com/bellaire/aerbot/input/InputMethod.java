@@ -1,7 +1,7 @@
 package com.bellaire.aerbot.input;
 
 public interface InputMethod {
-
+	
   public double getLeftX();
 
   public double getRightX();
@@ -25,4 +25,6 @@ public interface InputMethod {
   public boolean getLeftTurn();
   
   public boolean getRightTurn();
+  
+  public boolean getSwitchFront();
 }

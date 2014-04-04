@@ -59,4 +59,9 @@ public class JoystickInput implements InputMethod {
         return false;
     }
 
+		@Override
+		public boolean getSwitchFront() {
+			return false;
+		}
+
 }

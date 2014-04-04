@@ -66,4 +66,9 @@ public class Xbox360Input implements InputMethod {
   public boolean getRightTurn() {
     return controller.getRawAxis(6) > 0;
   }
+
+	@Override
+	public boolean getSwitchFront() {
+		return controller.getRawButton(BUTTON_START);
+	}
 }
