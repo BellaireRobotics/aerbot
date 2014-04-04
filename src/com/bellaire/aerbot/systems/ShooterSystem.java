@@ -18,7 +18,7 @@ public class ShooterSystem implements RobotSystem {
   private boolean shotPressed;
   private Timer timer;
   
-  public static final double DELAY = 2.0;
+  public static final double DELAY = 5.0;
 
   public void init(Environment e) {
     motor = new Victor(4);
