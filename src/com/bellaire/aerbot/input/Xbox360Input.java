@@ -76,4 +76,8 @@ public class Xbox360Input implements InputMethod {
 	public boolean getSwitchFront() {
 		return controller.getRawButton(BUTTON_Y);
 	}
+
+	public boolean getCatch() {
+		return controller.getRawButton(BUTTON_A);
+	}
 }

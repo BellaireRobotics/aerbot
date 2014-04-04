@@ -68,4 +68,8 @@ public class JoystickInput implements InputMethod {
 			return false;
 		}
 
+		public boolean getCatch() {
+			return false;
+		}
+
 }

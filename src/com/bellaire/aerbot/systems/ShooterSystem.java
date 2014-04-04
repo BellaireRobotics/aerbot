@@ -42,7 +42,9 @@ public class ShooterSystem implements RobotSystem {
     setMotor(input.getPrepareToShoot() ? 1 : 0);
     
     //toggle shooter pneumatic
-    if(!shotPressed && input.getShoot()){
+    if(input.getCatch())
+    	pneumatic.set(Relay.Value.kForward);
+    else if(!shotPressed && input.getShoot()){
     	if(shot)
     		pneumaticDown();
     	else

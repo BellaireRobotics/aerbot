@@ -29,4 +29,6 @@ public interface InputMethod {
   public boolean getAutoIntake();
 
   public boolean getSwitchFront();
+  
+  public boolean getCatch();
 }

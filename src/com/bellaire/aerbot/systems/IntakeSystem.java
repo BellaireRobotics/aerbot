@@ -36,7 +36,10 @@ public class IntakeSystem implements RobotSystem {
 		}
 
 		// let the pneumatic down
-		if (input.getIntakePneumatic() && !armPress) {
+		if(input.getCatch()){
+			arm.set(Relay.Value.kForward);
+			armDown = true;
+		}else if (input.getIntakePneumatic() && !armPress) {
 			arm.set(armDown ? Relay.Value.kReverse : Relay.Value.kForward);
 			armDown = !armDown;
 		} else if (!autoPress && input.getAutoIntake()) {
