@@ -15,7 +15,7 @@ public class IntakeSystem implements RobotSystem {
   private boolean autoPress;
 
   public void init(Environment e) {
-    motor = new Jaguar(4);
+    motor = new Jaguar(7);
     arm = new Relay(4);
   }
 
