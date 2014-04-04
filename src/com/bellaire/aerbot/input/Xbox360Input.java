@@ -80,4 +80,8 @@ public class Xbox360Input implements InputMethod {
 	public boolean getCatch() {
 		return controller.getRawButton(BUTTON_A);
 	}
+
+	public boolean getTurnAround() {
+		return controller.getRawButton(BUTTON_START);
+	}
 }

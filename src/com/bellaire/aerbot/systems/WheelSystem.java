@@ -101,6 +101,13 @@ public class WheelSystem implements RobotSystem {
     // make left and right turns
     if (Math.abs(input.getRightX()) > 0.12 && gyroPID.getPIDController().isEnable()) {
       gyroPID.disable();
+    } else if (input.getTurnAround() && !gyroPID.getPIDController().isEnable()){
+    	// 180 degree turn
+    	if(gyro.getHeading() >= 180)
+    		gyroPID.setSetpoint(gyro.getHeading() - 180);
+    	else
+    		gyroPID.setSetpoint(gyro.getHeading() + 180);
+    	gyroPID.enable();
     } else if (input.getLeftTurn() && !gyroPID.getPIDController().isEnable()) {
       if (gyro.getHeading() < 90) {
         gyroPID.setSetpoint(270 + gyro.getHeading());

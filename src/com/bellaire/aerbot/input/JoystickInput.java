@@ -72,4 +72,8 @@ public class JoystickInput implements InputMethod {
 			return false;
 		}
 
+		public boolean getTurnAround() {
+			return false;
+		}
+
 }

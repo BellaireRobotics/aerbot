@@ -31,4 +31,6 @@ public interface InputMethod {
   public boolean getSwitchFront();
   
   public boolean getCatch();
+  
+  public boolean getTurnAround();
 }
