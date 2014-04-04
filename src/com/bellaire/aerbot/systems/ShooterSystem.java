@@ -53,7 +53,7 @@ public class ShooterSystem implements RobotSystem {
     try{
     	SmartDashboard.putBoolean("Shooter motor on: ", motorOn);
     	SmartDashboard.putNumber("Shooter motor speed: ", motor.getSpeed());
-    	SmartDashboard.putBoolean("Shooter pneumatic on: ", pneumatic.get() != Relay.Value.kReverse);
+    	SmartDashboard.putBoolean("Shooter pneumatic on: ", pneumatic.get() != Relay.Value.kOff);
     }catch(NullPointerException ex){
     	
     }
@@ -76,7 +76,7 @@ public class ShooterSystem implements RobotSystem {
   
   public void pneumaticDown(){
 	  if(shot){
-		  pneumatic.set(Relay.Value.kReverse);
+		  pneumatic.set(Relay.Value.kOff);
 		  shot = false;
 	  }
   }
