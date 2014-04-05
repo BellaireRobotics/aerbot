@@ -15,7 +15,7 @@ public class ShooterListener implements Listener {
   }
 
   public boolean shouldExecute() {
-    return true;
+    return env.isOperatorControl();
   }
 
   public void execute() {

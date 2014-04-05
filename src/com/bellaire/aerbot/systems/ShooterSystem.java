@@ -2,44 +2,85 @@ package com.bellaire.aerbot.systems;
 
 import com.bellaire.aerbot.Environment;
 import com.bellaire.aerbot.input.InputMethod;
-import edu.wpi.first.wpilibj.Jaguar;
+
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSystem implements RobotSystem {
 
-  private Jaguar jaguar;
-
-  private long start = 0, end = 0;
+  private Victor motor;
+  private Relay pneumatic;
+  private boolean shot;
+  private boolean buttonPressed;
+  private boolean motorOn;
+  private boolean shotPressed;
+  private Timer timer;
+  
+  public static final double DELAY = 5.0;
 
   public void init(Environment e) {
-    jaguar = new Jaguar(10);
-
-    SmartDashboard.putNumber("shooter interval", 0.3d);
-    SmartDashboard.putNumber("shooter power", 0.3d);
+    motor = new Victor(4);
+    pneumatic = new Relay(6);
+    timer = new Timer();
+    timer.start();
   }
 
   public void destroy() {
-
+	  motor.free();
+	  pneumatic.free();
   }
 
   public void shoot(InputMethod input) {
-    SmartDashboard.putNumber("shooter motor", jaguar.get());
-
-    if (input.getShoot() && start == -1) {
-      start = System.currentTimeMillis();
-      jaguar.set(-SmartDashboard.getNumber("shooter power", 0.3d));
+    if(input.getPrepareToShoot() && !buttonPressed){
+    	//toggle wheels speed between off and full speed
+    	setMotor(motorOn ? 0 : 1);
     }
-
-    if (input.getAntiShoot()) {
-      jaguar.set(0.2d);
+    buttonPressed = input.getPrepareToShoot();
+    //control shooter motor
+    setMotor(input.getPrepareToShoot() ? 1 : 0);
+    
+    //toggle shooter pneumatic
+    if(input.getCatch())
+    	pneumatic.set(Relay.Value.kForward);
+    else if(!shotPressed && input.getShoot()){
+    	if(shot)
+    		pneumaticDown();
+    	else
+    		fire();
     }
-
-    long cur = System.currentTimeMillis();
-
-    if (cur - start > (1000 * SmartDashboard.getNumber("shooter interval", 3d)) && start != -1) {
-      start = -1;
-      jaguar.set(0d);
+    shotPressed = input.getShoot();
+    
+    try{
+    	SmartDashboard.putBoolean("Shooter motor on: ", motorOn);
+    	SmartDashboard.putNumber("Shooter motor speed: ", motor.getSpeed());
+    	SmartDashboard.putBoolean("Shooter pneumatic on: ", pneumatic.get() != Relay.Value.kOff);
+    }catch(NullPointerException ex){
+    	
     }
+  }
+  
+  public void setMotor(double speed){
+	  motor.set(speed);
+	  if(!motorOn && speed == 1)
+	  	timer.reset();
+	  motorOn = speed == 1;// update the motorOn instance variable
+  }
+  
+  public void fire(){
+	  if(!shot && motorOn && timer.get() > 2){
+	  	// delay shooting pneumatic
+		  pneumatic.set(Relay.Value.kForward);
+		  shot = true;
+	  }
+  }
+  
+  public void pneumaticDown(){
+	  if(shot){
+		  pneumatic.set(Relay.Value.kOff);
+		  shot = false;
+	  }
   }
 
 }

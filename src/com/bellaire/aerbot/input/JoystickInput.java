@@ -39,17 +39,17 @@ public class JoystickInput implements InputMethod {
         return left.getRawButton(3);
     }
 
-    public boolean getShoot() {
-        return right.getTrigger();
-    }
-
     public boolean gearSwitch() {
         return false;
     }
 
-    public boolean getAntiShoot() {
-        return false;
-    }
+    public boolean getShoot() {
+      return right.getTrigger();
+  }
+  
+  public boolean getPrepareToShoot() {
+      return false;
+  }
 
     public boolean getLeftTurn() {
         return false;
@@ -58,5 +58,22 @@ public class JoystickInput implements InputMethod {
     public boolean getRightTurn() {
         return false;
     }
+
+
+		public boolean getAutoIntake() {
+			return false;
+		}
+
+		public boolean getSwitchFront() {
+			return false;
+		}
+
+		public boolean getCatch() {
+			return false;
+		}
+
+		public boolean getTurnAround() {
+			return false;
+		}
 
 }
