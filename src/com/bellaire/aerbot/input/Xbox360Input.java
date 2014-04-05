@@ -46,11 +46,11 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getIntakePneumatic() {
-    return partner.getRawAxis(3) < .2;
+    return partner.getRawAxis(3) > .2;
   }
 
   public boolean getShoot() {
-    return partner.getRawAxis(3) > 0.2;
+    return partner.getRawAxis(3) < 0.2;
   }
   
   public boolean getPrepareToShoot(){
