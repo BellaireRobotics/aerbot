@@ -46,11 +46,11 @@ public class Xbox360Input implements InputMethod {
   }
 
   public boolean getIntakePneumatic() {
-    return partner.getRawAxis(3) > .2;
+    return partner.getRawButton(BUTTON_START);
   }
 
   public boolean getShoot() {
-    return partner.getRawAxis(3) < 0.2;
+    return partner.getRawAxis(3) > 0.2;
   }
   
   public boolean getPrepareToShoot(){
@@ -82,6 +82,6 @@ public class Xbox360Input implements InputMethod {
 	}
 
 	public boolean getTurnAround() {
-		return controller.getRawButton(BUTTON_START);
+		return controller.getRawButton(BUTTON_BACK);
 	}
 }
