@@ -17,7 +17,7 @@ public class IntakeSystem implements RobotSystem {
 	public void init(Environment e) {
 		motor = new Jaguar(7);
 		arm = new Relay(5);
-		arm.set(Relay.Value.kOff);
+		arm.set(Relay.Value.kReverse);
 	}
 
 	public void destroy() {

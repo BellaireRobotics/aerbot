@@ -46,7 +46,7 @@ public class ShooterSystem implements RobotSystem {
     	pneumatic.set(Relay.Value.kForward);
     else if(!shotPressed && input.getShoot()){
     	if(shot)
-    		pneumaticDown();
+    		pneumaticUp();
     	else
     		fire();
     }
@@ -69,14 +69,14 @@ public class ShooterSystem implements RobotSystem {
   }
   
   public void fire(){
-	  if(!shot && motorOn && timer.get() > 2){
+	  if(!shot && motorOn && timer.get() > DELAY){
 	  	// delay shooting pneumatic
 		  pneumatic.set(Relay.Value.kForward);
 		  shot = true;
 	  }
   }
   
-  public void pneumaticDown(){
+  public void pneumaticUp(){
 	  if(shot){
 		  pneumatic.set(Relay.Value.kOff);
 		  shot = false;
